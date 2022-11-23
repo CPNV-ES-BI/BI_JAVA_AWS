@@ -1,4 +1,4 @@
-package com.example.microservicedocker;
+package com.example.springdockerdemo;
 
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;

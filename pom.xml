@@ -9,10 +9,10 @@
         <relativePath/> <!-- lookup parent from repository -->
     </parent>
     <groupId>com.example</groupId>
-    <artifactId>microservice-docker</artifactId>
+    <artifactId>spring-docker-demo</artifactId>
     <version>0.0.1-SNAPSHOT</version>
-    <name>microservice-docker</name>
-    <description>microservice-docker</description>
+    <name>spring-docker-demo</name>
+    <description>Spring boot microservice using docker</description>
     <properties>
         <java.version>17</java.version>
         <spring-cloud.version>2021.0.5</spring-cloud.version>
