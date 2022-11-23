@@ -18,6 +18,17 @@
 This is a Spring Boot microservice that can be run as a Docker container.
 It is a simple REST API that returns 'Hello World'.
 
+## Requirements
+
+### Docker
+
+* Docker
+
+### Local
+
+* Java 17
+* Maven
+
 ## Build
 
 To build the Docker image, run the following command:
