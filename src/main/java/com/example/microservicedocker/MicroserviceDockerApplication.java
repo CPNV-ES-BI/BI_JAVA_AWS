@@ -15,6 +15,6 @@ public class MicroserviceDockerApplication {
 
     @GetMapping("/")
     public String home() {
-        return "Hello World";
+        return "Hello World !";
     }
 }
