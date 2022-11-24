@@ -3,14 +3,15 @@
 ## Table of Contents
 
 <!-- TOC -->
-
 * [Spring Boot Microservice Docker](#spring-boot-microservice-docker)
-    * [Introduction](#introduction)
-    * [Build](#build)
-    * [Run](#run)
-    * [Usage](#usage)
-    * [Test](#test)
-
+  * [Table of Contents](#table-of-contents)
+  * [Introduction](#introduction)
+  * [Requirements](#requirements)
+  * [Docker](#docker)
+  * [Local](#local)
+  * [Usage](#usage)
+  * [Test](#test)
+  * [References](#references)
 <!-- TOC -->
 
 ## Introduction
@@ -20,29 +21,43 @@ It is a simple REST API that returns 'Hello World'.
 
 ## Requirements
 
-### Docker
-
-* Docker
-
-### Local
-
 * Java 17
 * Maven
+* Docker
+* Docker Compose
 
-## Build
+## Docker
 
 To build the Docker image, run the following command:
 
 ```bash
-docker build -t spring-helloworld .
+# Build the jar file
+mvn clean package -DskipTests
+# Build the Docker image
+docker-compose build
 ```
-
-## Run
 
 To run the Docker container, run the following command:
 
 ```bash
-docker run -p 8080:8080 spring-helloworld
+# Build the jar file
+mvn clean package -DskipTests
+# Run the Docker container
+docker-compose run api
+```
+
+## Local
+
+To build the application in local, run the following command:
+
+```bash
+mvn clean package -DskipTests
+```
+
+To run the application in local, run the following command:
+
+```bash
+mvn spring-boot:run
 ```
 
 ## Usage
@@ -55,14 +70,14 @@ curl http://localhost:8080
 
 ## Test
 
-To run the tests in docker, run the following command:
-
-```bash
-docker run spring-helloworld ./mvnw test
-```
-
 To run the tests in local, run the following command:
 
 ```bash
-./mvnw test
+mvn test
 ```
+
+---
+
+## References
+
+* [Docker - Kickstart Your Spring Boot Application Development](https://www.docker.com/blog/kickstart-your-spring-boot-application-development/)
