@@ -31,24 +31,18 @@ It is a simple REST API that returns 'Hello World'.
 To build the Docker image, run the following command:
 
 ```bash
-# Build the jar file
-mvn clean package -DskipTests
-# Build the Docker image
-docker-compose build
+./docker-build
 ```
 
 To run the Docker container, run the following command:
 
 ```bash
-# Build the jar file
-mvn clean package -DskipTests
-# Run the Docker container
-docker-compose run api
+docker compose up
 ```
 
 ## Local
 
-To build the application in local, run the following command:
+To install the application in local, run the following command:
 
 ```bash
 mvn clean package -DskipTests
