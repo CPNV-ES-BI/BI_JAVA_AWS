@@ -14,7 +14,7 @@
     <name>spring-docker-demo</name>
     <description>Spring boot microservice using docker</description>
     <properties>
-        <java.version>17</java.version>
+        <java.version>19</java.version>
         <spring-cloud.version>2021.0.5</spring-cloud.version>
     </properties>
     <dependencies>

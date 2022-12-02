@@ -1,8 +1,13 @@
-FROM openjdk:17-jdk-alpine
+FROM openjdk:19-jdk-alpine as base
 
-ARG JAR_FILE=target/*.jar
-COPY ${JAR_FILE} app.jar
+WORKDIR /app
+COPY .mvn/ .mvn
+COPY mvnw pom.xml ./
+RUN ./mvnw dependency:resolve
+COPY src ./src
 
-EXPOSE 8080
+FROM base as test
+CMD ["./mvnw", "test"]
 
-ENTRYPOINT ["java","-jar","/app.jar"]
+FROM base as development
+CMD ["./mvnw", "spring-boot:run"]
