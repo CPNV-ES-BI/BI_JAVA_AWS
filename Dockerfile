@@ -1,4 +1,4 @@
-FROM openjdk:19-jdk-alpine as base
+FROM openjdk:17-jdk-alpine as base
 
 WORKDIR /app
 COPY .mvn/ .mvn

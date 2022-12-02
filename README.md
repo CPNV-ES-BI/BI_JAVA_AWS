@@ -37,7 +37,7 @@ To build the Docker image, run the following command:
 To run the Docker container, run the following command:
 
 ```bash
-docker compose up
+docker compose up development
 ```
 
 ## Local
