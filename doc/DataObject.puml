@@ -1,0 +1,11 @@
+@startuml
+'https://plantuml.com/class-diagram
+
+interface DataObject {
+    boolean doesExists()
+    void createObject(obj: Object)
+    Object downloadObject(path: String)
+    void publishObject(obj: Object)
+}
+
+@enduml
