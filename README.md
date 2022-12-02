@@ -21,7 +21,7 @@ It is a simple REST API that returns 'Hello World'.
 
 ## Requirements
 
-* Java 17
+* Java 19
 * Maven
 * Docker
 * Docker Compose
