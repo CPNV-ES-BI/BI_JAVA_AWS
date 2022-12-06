@@ -1,4 +1,4 @@
-package com.example.springdockerdemo;
+package com.example.bijavaaws;
 
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
@@ -12,7 +12,7 @@ import org.springframework.test.web.servlet.MockMvc;
 
 @SpringBootTest
 @AutoConfigureMockMvc
-class MicroserviceDockerApplicationTests {
+class BIJavaAWSTests {
 
     @Autowired
     private MockMvc mockMvc;

@@ -1,9 +1,9 @@
-# Spring Boot Microservice Docker
+# BI Java AWS
 
 ## Table of Contents
 
 <!-- TOC -->
-* [Spring Boot Microservice Docker](#spring-boot-microservice-docker)
+* [BI Java AWS](#bi-java-aws)
   * [Table of Contents](#table-of-contents)
   * [Introduction](#introduction)
   * [Requirements](#requirements)
@@ -11,7 +11,6 @@
   * [Local](#local)
   * [Usage](#usage)
   * [Test](#test)
-  * [References](#references)
 <!-- TOC -->
 
 ## Introduction
@@ -69,9 +68,3 @@ To run the tests in local, run the following command:
 ```bash
 mvn test
 ```
-
----
-
-## References
-
-* [Docker - Kickstart Your Spring Boot Application Development](https://www.docker.com/blog/kickstart-your-spring-boot-application-development/)
