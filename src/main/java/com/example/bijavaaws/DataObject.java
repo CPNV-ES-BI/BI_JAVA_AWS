@@ -7,5 +7,5 @@ public interface DataObject {
 
     Object downloadObject(String path);
 
-    void publishObject();
+    void publishObject(Object obj);
 }

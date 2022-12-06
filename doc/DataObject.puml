@@ -1,11 +1,19 @@
 @startuml
 'https://plantuml.com/class-diagram
 
+legend top
+    Project
+        BI_JAVA_AWS
+    Authors
+        Yannick Baudraz
+        Anthony Bouillant
+endlegend
+
 interface DataObject {
-    boolean doesExists()
-    void createObject(obj: Object)
-    Object downloadObject(path: String)
-    void publishObject(obj: Object)
+    + doesExists(obj : object) : boolean
+    + createObject(obj : object) : void
+    + downloadObject(path : string) : object
+    + publishObject(obj : object) : void
 }
 
 @enduml

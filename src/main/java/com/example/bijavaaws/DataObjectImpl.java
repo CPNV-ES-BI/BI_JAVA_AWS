@@ -17,7 +17,7 @@ public class DataObjectImpl implements DataObject {
     }
 
     @Override
-    public void publishObject() {
+    public void publishObject(Object obj) {
         throw new UnsupportedOperationException("Not implemented yet");
     }
 }
