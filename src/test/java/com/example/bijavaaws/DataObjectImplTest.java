@@ -17,7 +17,7 @@ class DataObjectImplTest {
     }
 
     @Test
-    void doesExists_Exists_True() {
+    void doesExist_ExistsCase_True() {
         // Given
         Object obj = new Object();
 
@@ -29,7 +29,7 @@ class DataObjectImplTest {
     }
 
     @Test
-    void DoesExist_NotExists_False() {
+    void doesExist_NotExists_False() {
         // Given
         Object obj = new Object();
 
@@ -41,7 +41,7 @@ class DataObjectImplTest {
     }
 
     @Test
-    void CreateObject_NominalCase_Success() {
+    void createObject_NominalCase_ObjectExists() {
         // Given
         Object obj = new Object();
 
@@ -53,7 +53,7 @@ class DataObjectImplTest {
     }
 
     @Test
-    void CreateObject_AlreadyExists_ThrowException() {
+    void createObject_AlreadyExists_ThrowException() {
         // Given
         Object obj = new Object();
         dataObject.createObject(obj);
