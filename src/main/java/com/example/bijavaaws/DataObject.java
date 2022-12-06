@@ -1,4 +1,4 @@
-package com.example.springdockerdemo;
+package com.example.bijavaaws;
 
 public interface DataObject {
     boolean doesExists(Object obj);
