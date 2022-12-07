@@ -4,6 +4,7 @@ services:
     container_name: development
     build:
         context: .
+        dockerfile: docker/Dockerfile
         target: development
     ports:
       - "8080:8080"
@@ -11,4 +12,5 @@ services:
     container_name: test
     build:
         context: .
+        dockerfile: docker/Dockerfile
         target: test

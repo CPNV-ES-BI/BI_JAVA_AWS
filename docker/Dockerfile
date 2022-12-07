@@ -1,10 +1,10 @@
 FROM openjdk:17-jdk-alpine as base
 
 WORKDIR /app
-COPY .mvn/ .mvn
-COPY mvnw pom.xml ./
+COPY ../.mvn .mvn
+COPY ../mvnw pom.xml ./
 RUN ./mvnw dependency:resolve
-COPY src ./src
+COPY ../src ./src
 
 FROM base as test
 CMD ["./mvnw", "test"]
