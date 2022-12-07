@@ -1,0 +1,24 @@
+name: Docker Image CI
+
+on:
+  push:
+    branches: [ "develop", "main" ]
+  pull_request:
+    branches: [ "develop", "main" ]
+
+jobs:
+  test:
+    name: Run test suite
+    runs-on: ubuntu-latest
+    env:
+      COMPOSE_FILE: ./docker-compose.yml
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+
+      - name: Build docker images
+        run: docker-compose build
+
+      - name: Run tests
+        run: docker-compose run test
