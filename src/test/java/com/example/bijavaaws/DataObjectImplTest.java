@@ -5,17 +5,18 @@ import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.test.context.ContextConfiguration;
+import org.springframework.test.context.junit.jupiter.SpringExtension;
 
+@ExtendWith(SpringExtension.class)
+@ContextConfiguration(classes = BIJavaAWS.class)
 class DataObjectImplTest {
 
+    @Autowired
     private DataObjectImpl dataObject;
-
-    @BeforeEach
-    void setUp() {
-        dataObject = new DataObjectImpl();
-    }
 
     @Test
     void doesExist_ExistsCase_True() {

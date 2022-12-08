@@ -1,13 +1,33 @@
 package com.example.bijavaaws;
 
-import software.amazon.awssdk.services.s3.S3Client;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
 
+import java.util.List;
+
+import javax.annotation.PostConstruct;
+
+import software.amazon.awssdk.services.s3.S3Client;
+import software.amazon.awssdk.services.s3.model.Bucket;
+
+@Component
 public class DataObjectImpl implements DataObject {
 
-    private final S3Client s3;
+    @SuppressWarnings("SpringJavaAutowiredFieldsWarningInspection")
+    @Autowired
+    private S3Client s3Client;
 
-    public DataObjectImpl() {
-        s3 = S3Client.create();
+    /**
+     * Because application properties  are not available in the constructor,
+     * we need to use the @PostConstruct annotation.
+     */
+    @PostConstruct
+    public void init() {
+        s3Client.listBuckets().buckets().forEach(System.out::println);
+    }
+
+    List<Bucket> listBuckets() {
+        return s3Client.listBuckets().buckets();
     }
 
     @Override
