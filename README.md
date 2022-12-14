@@ -2,8 +2,6 @@
 
 ## Table of Contents
 
-<!-- TOC -->
-
 * [BI Java AWS](#bi-java-aws)
     * [Table of Contents](#table-of-contents)
     * [Introduction](#introduction)
@@ -13,8 +11,6 @@
     * [Docker](#docker)
     * [Local](#local)
     * [Usage](#usage)
-
-<!-- TOC -->
 
 ## Introduction
 
@@ -50,18 +46,18 @@ to the repository.
 
 ## Docker
 
-To run the Docker container, run the following command:
+To build and run the Docker container, run the following command:
 
 ```bash
-docker compose up development
+docker compose up development --build
 # or
 make docker-up
 ```
 
-To test the Docker container, run the following command:
+To build and test the Docker container, run the following command:
 
 ```bash
-docker compose up test
+docker compose up test --build
 # or
 make docker-up-test
 ```
