@@ -1,5 +1,9 @@
 # BI Java AWS
 
+<div style="position: fixed; bottom: 0; right: 0; padding-right: 1em; padding-bottom: 2em;">
+  <p align="right"><a href="#bi-java-aws">Back to top &#9650;</a></p>
+</div>
+
 * [BI Java AWS](#bi-java-aws)
     * [Introduction](#introduction)
     * [Requirements](#requirements)
@@ -8,6 +12,7 @@
     * [Usage](#usage)
     * [Test](#test)
     * [Contributing](#contributing)
+    * [License](#license)
 
 ## Introduction
 
@@ -81,3 +86,9 @@ If you would like to contribute code to the project, please follow these steps:
 We will review your pull request and discuss any necessary changes before merging it.
 
 Thank you for considering contributing to this project!
+
+## License
+
+Distribution is permitted under the terms of the [MIT License](LICENSE).
+
+[MIT](https://choosealicense.com/licenses/mit/)
