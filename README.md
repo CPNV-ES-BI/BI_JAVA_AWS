@@ -1,19 +1,5 @@
 # BI Java AWS
 
-<div style="position: fixed; bottom: 0; right: 0; padding-right: 1em; padding-bottom: 2em;">
-  <p align="right"><a href="#bi-java-aws">Back to top &#9650;</a></p>
-</div>
-
-* [BI Java AWS](#bi-java-aws)
-    * [Introduction](#introduction)
-    * [Requirements](#requirements)
-    * [Docker](#docker)
-    * [Local](#local)
-    * [Usage](#usage)
-    * [Test](#test)
-    * [Contributing](#contributing)
-    * [License](#license)
-
 ## Introduction
 
 This is a Spring Boot microservice that can be run as a Docker container.
@@ -42,10 +28,10 @@ docker compose up development
 
 ## Local
 
-To install the application in local, run the following command:
+To install the dependencies, run the following command:
 
 ```bash
-mvn clean package -DskipTests
+mvn dependency:resolve
 ```
 
 To run the application in local, run the following command:
