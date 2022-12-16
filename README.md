@@ -76,5 +76,3 @@ Thank you for considering contributing to this project!
 ## License
 
 Distribution is permitted under the terms of the [MIT License](LICENSE).
-
-[MIT](https://choosealicense.com/licenses/mit/)
