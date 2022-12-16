@@ -1,18 +1,5 @@
 # BI Java AWS
 
-## Table of Contents
-
-<!-- TOC -->
-* [BI Java AWS](#bi-java-aws)
-  * [Table of Contents](#table-of-contents)
-  * [Introduction](#introduction)
-  * [Requirements](#requirements)
-  * [Docker](#docker)
-  * [Local](#local)
-  * [Usage](#usage)
-  * [Test](#test)
-<!-- TOC -->
-
 ## Introduction
 
 This is a Spring Boot microservice that can be run as a Docker container.
@@ -41,10 +28,10 @@ docker compose up development
 
 ## Local
 
-To install the application in local, run the following command:
+To install the dependencies, run the following command:
 
 ```bash
-mvn clean package -DskipTests
+mvn dependency:resolve
 ```
 
 To run the application in local, run the following command:
@@ -68,3 +55,24 @@ To run the tests in local, run the following command:
 ```bash
 mvn test
 ```
+
+## Contributing
+
+We welcome contributions to this project! If you have an idea for a new feature or have found a bug, please open
+an issue on GitHub to let us know.
+
+If you would like to contribute code to the project, please follow these steps:
+
+1. Clone the repository to your local machine
+2. Create a new branch for your feature using `git flow feature start <feature-name>`
+3. Write and test your code
+4. Update the documentation as necessary
+5. Submit a pull request. Any pull request that does not pass the CI/CD pipeline or without new tests will be rejected.
+
+We will review your pull request and discuss any necessary changes before merging it.
+
+Thank you for considering contributing to this project!
+
+## License
+
+Distribution is permitted under the terms of the [MIT License](LICENSE).
