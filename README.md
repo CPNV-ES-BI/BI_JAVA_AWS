@@ -38,11 +38,12 @@ Copy the `aws.example.properties` file and rename it to `aws.properties`.
 <span style="color:red">**NOTE:**</span> The `aws.properties` contains sensitive information and should not be committed
 to the repository.
 
-| Property Name       | Description                                                |
-|---------------------|------------------------------------------------------------|
-| aws.region          | The AWS region                                             |
-| aws.accessKeyId     | The S3 key name where the application will be deployed.    |
-| aws.secretAccessKey | The S3 secret name where the application will be deployed. |
+| Property Name       | Description                          |
+|---------------------|--------------------------------------|
+| aws.region          | AWS region                           |
+| aws.accessKeyId     | S3 key id                            |
+| aws.secretAccessKey | S3 secret name                       |
+| aws.bucketName      | S3 bucket name to use in the service |
 
 ## Docker
 

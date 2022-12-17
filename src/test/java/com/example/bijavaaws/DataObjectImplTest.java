@@ -4,12 +4,14 @@ import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.junit.jupiter.api.Assertions.fail;
 
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
+import org.springframework.test.util.ReflectionTestUtils;
 
 @ExtendWith(SpringExtension.class)
 @ContextConfiguration(classes = BIJavaAWS.class)
@@ -21,10 +23,10 @@ class DataObjectImplTest {
     @Test
     void doesExist_ExistsCase_True() {
         // Given
-        Object obj = new Object();
+        // bucketName in aws.properties file
 
         // When
-        boolean result = dataObject.doesExists(obj);
+        boolean result = dataObject.doesExist();
 
         // Then
         assertTrue(result);
@@ -33,10 +35,10 @@ class DataObjectImplTest {
     @Test
     void doesExist_NotExists_False() {
         // Given
-        Object obj = new Object();
+        ReflectionTestUtils.setField(dataObject, "bucketName", "not-exists");
 
         // When
-        boolean result = dataObject.doesExists(obj);
+        boolean result = dataObject.doesExist();
 
         // Then
         assertFalse(result);
@@ -51,7 +53,7 @@ class DataObjectImplTest {
         dataObject.createObject(obj);
 
         // Then
-        assertTrue(dataObject.doesExists(obj));
+        assertTrue(dataObject.doesExist());
     }
 
     @Test
@@ -76,7 +78,7 @@ class DataObjectImplTest {
         dataObject.createObject(obj);
 
         // Then
-        assertTrue(dataObject.doesExists(obj));
+        assertTrue(dataObject.doesExist());
     }
 
     @Test
@@ -114,6 +116,7 @@ class DataObjectImplTest {
         dataObject.publishObject(obj);
 
         // Then
+        fail();
     }
 
     @Test

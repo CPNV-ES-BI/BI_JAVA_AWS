@@ -1,14 +1,14 @@
 package com.example.bijavaaws;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
 import java.util.List;
 
-import javax.annotation.PostConstruct;
-
 import software.amazon.awssdk.services.s3.S3Client;
 import software.amazon.awssdk.services.s3.model.Bucket;
+import software.amazon.awssdk.services.s3.model.NoSuchBucketException;
 
 @Component
 public class DataObjectImpl implements DataObject {
@@ -17,22 +17,21 @@ public class DataObjectImpl implements DataObject {
     @Autowired
     private S3Client s3Client;
 
-    /**
-     * Because application properties  are not available in the constructor,
-     * we need to use the @PostConstruct annotation.
-     */
-    @PostConstruct
-    public void init() {
-        s3Client.listBuckets().buckets().forEach(System.out::println);
-    }
+    @Value("${aws.bucketName}")
+    private String bucketName;
 
     List<Bucket> listBuckets() {
         return s3Client.listBuckets().buckets();
     }
 
     @Override
-    public boolean doesExists(Object obj) {
-        throw new UnsupportedOperationException("Not implemented yet");
+    public boolean doesExist() {
+        try {
+            s3Client.headBucket(builder -> builder.bucket(bucketName));
+            return true;
+        } catch (NoSuchBucketException e) {
+            return false;
+        }
     }
 
     @Override

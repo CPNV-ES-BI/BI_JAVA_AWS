@@ -1,7 +1,7 @@
 package com.example.bijavaaws;
 
 public interface DataObject {
-    boolean doesExists(Object obj);
+    boolean doesExist();
 
     void createObject(Object obj);
 
