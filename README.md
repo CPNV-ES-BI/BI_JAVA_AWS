@@ -76,3 +76,14 @@ Thank you for considering contributing to this project!
 ## License
 
 Distribution is permitted under the terms of the [MIT License](LICENSE).
+
+## Contact
+
+### Authors
+
+- [Yannick Baudraz](https://github.com/yannickcpnv)
+- [Anthony Bouillant](https://github.com/antbou)
+
+### Reviewers
+
+- [Nicolas Glassey](https://github.com/NicolasGlassey)
