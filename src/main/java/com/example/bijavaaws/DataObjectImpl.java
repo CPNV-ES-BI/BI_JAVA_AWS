@@ -1,6 +1,7 @@
 package com.example.bijavaaws;
 
 import com.example.bijavaaws.exceptions.ObjectAlreadyExistsException;
+import com.example.bijavaaws.exceptions.ObjectNotFoundException;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
@@ -28,9 +29,9 @@ public class DataObjectImpl implements DataObject {
     }
 
     @Override
-    public boolean doesExist(Path path) {
+    public boolean doesExist(Path objectPath) {
         try {
-            s3Client.headObject(builder -> builder.bucket(bucketName).key(getObjectName(path)));
+            s3Client.headObject(builder -> builder.bucket(bucketName).key(getObjectName(objectPath)));
             return true;
         } catch (NoSuchKeyException e) {
             return false;
@@ -49,6 +50,9 @@ public class DataObjectImpl implements DataObject {
 
     @Override
     public byte[] downloadObject(Path path) {
+        if (!doesExist(path))
+            throw new ObjectNotFoundException(getObjectName(path));
+
         return s3Client.getObjectAsBytes(builder -> builder.bucket(bucketName).key(getObjectName(path))).asByteArray();
     }
 
