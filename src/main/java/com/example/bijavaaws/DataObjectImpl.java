@@ -1,5 +1,7 @@
 package com.example.bijavaaws;
 
+import com.example.bijavaaws.exceptions.ObjectAlreadyExistsException;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
@@ -28,7 +30,7 @@ public class DataObjectImpl implements DataObject {
     @Override
     public boolean doesExist(Path objectPath) {
         try {
-            s3Client.headObject(builder -> builder.bucket(bucketName).key(objectPath.getFileName().toString()));
+            s3Client.headObject(builder -> builder.bucket(bucketName).key(getObjectName(objectPath)));
             return true;
         } catch (NoSuchKeyException e) {
             if (e.statusCode() == 404)
@@ -39,10 +41,12 @@ public class DataObjectImpl implements DataObject {
 
     @Override
     public void createObject(Path objectPath) {
-        s3Client.putObject(
-                builder -> builder.bucket(bucketName).key(objectPath.getFileName().toString()),
-                objectPath
-        );
+        String objectName = getObjectName(objectPath);
+
+        if (doesExist(objectPath))
+            throw new ObjectAlreadyExistsException(objectName);
+
+        s3Client.putObject(builder -> builder.bucket(bucketName).key(objectName).build(), objectPath);
     }
 
     @Override
@@ -53,5 +57,9 @@ public class DataObjectImpl implements DataObject {
     @Override
     public void publishObject(Object obj) {
         throw new UnsupportedOperationException("Not implemented yet");
+    }
+
+    private String getObjectName(Path objectPath) {
+        return objectPath.getFileName().toString();
     }
 }
