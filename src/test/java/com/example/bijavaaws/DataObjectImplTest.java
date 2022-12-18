@@ -4,13 +4,12 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
-import static org.junit.jupiter.api.Assertions.fail;
 
-import com.example.bijavaaws.exceptions.ObjectAlreadyExistsException;
 import com.example.bijavaaws.exceptions.ObjectNotFoundException;
 
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeAll;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -31,24 +30,31 @@ class DataObjectImplTest {
     private DataObjectImpl dataObject;
 
     private static Path testFilePath;
+    private String objectKey;
 
     @BeforeAll
     static void beforeAll() throws FileNotFoundException {
         testFilePath = ResourceUtils.getFile("classpath:test-file.txt").toPath();
     }
 
+    @BeforeEach
+    void beforeEach() {
+        dataObject.createObject(testFilePath);
+        objectKey = testFilePath.getFileName().toString();
+    }
+
     @AfterEach
     void afterEach() {
-        // TODO : Remove the test file from the bucket
+        dataObject.deleteObject(objectKey);
     }
 
     @Test
     void doesExist_ExistsCase_True() {
         // Given
-        dataObject.createObject(testFilePath);
+        // createObject() is called in beforeEach()
 
         // When
-        boolean result = dataObject.doesExist(testFilePath);
+        boolean result = dataObject.doesExist(objectKey);
 
         // Then
         assertTrue(result);
@@ -57,10 +63,10 @@ class DataObjectImplTest {
     @Test
     void doesExist_NotExists_False() {
         // Given
-        Path notExistsPath = Path.of("not-exists");
+        String objectKey = "not-exists";
 
         // When
-        boolean result = dataObject.doesExist(notExistsPath);
+        boolean result = dataObject.doesExist(objectKey);
 
         // Then
         assertFalse(result);
@@ -69,15 +75,16 @@ class DataObjectImplTest {
     @Test
     void createObject_NominalCase_ObjectExists() {
         // When
-        dataObject.createObject(testFilePath);
+        // createObject() is called in beforeEach()
 
         // Then
-        assertTrue(dataObject.doesExist(testFilePath));
+        assertTrue(dataObject.doesExist(objectKey));
     }
 
     @Test
     void createObject_AlreadyExists_ThrowException() {
-        dataObject.createObject(testFilePath);
+        // Given
+        // createObject() is called in beforeEach()
 
         // Then
         assertThrows(Exception.class, () -> {
@@ -95,17 +102,17 @@ class DataObjectImplTest {
         dataObject.createObject(sourcePath);
 
         // Then
-        assertTrue(dataObject.doesExist(testFilePath));
+        assertTrue(dataObject.doesExist(objectKey));
     }
 
     @Test
     void downloadObject_NominalCase_Downloaded() throws IOException {
         // Given
-        dataObject.createObject(testFilePath);
+        // createObject() is called in beforeEach()
         byte[] expectedContent = Files.readAllBytes(testFilePath);
 
         // When
-        byte[] result = dataObject.downloadObject(testFilePath);
+        byte[] result = dataObject.downloadObject(objectKey);
 
         // Then
         assertEquals(expectedContent, result);
@@ -114,36 +121,36 @@ class DataObjectImplTest {
     @Test
     void downloadObject_NotExists_ThrowException() {
         // Given
-        Path notExistsPath = Path.of("not-exists");
+        String objectKey = "not-exists";
 
         // Then
         assertThrows(ObjectNotFoundException.class, () -> {
             // When
-            dataObject.downloadObject(notExistsPath);
+            dataObject.downloadObject(objectKey);
         });
     }
 
     @Test
     void publishObject_NominalCase_ObjectPublished() {
         // Given
-        Object obj = new Object();
+        // createObject() is called in beforeEach()
 
         // When
-        dataObject.publishObject(obj);
+        dataObject.publishObject(objectKey);
 
         // Then
-        fail();
+        assertTrue(dataObject.isPublic(objectKey));
     }
 
     @Test
     void publishObject_ObjectNotFound_ThrowException() {
         // Given
-        Object obj = new Object();
+        String objectKey = "not-exists";
 
         // Then
-        assertThrows(ObjectAlreadyExistsException.class, () -> {
+        assertThrows(ObjectNotFoundException.class, () -> {
             // When
-            dataObject.publishObject(obj);
+            dataObject.publishObject(objectKey);
         });
     }
 }

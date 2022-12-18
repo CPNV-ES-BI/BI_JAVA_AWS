@@ -10,10 +10,10 @@ legend top
 endlegend
 
 interface DataObject {
-    + doesExist(objectPath : Path) : boolean
-    + createObject(sourcePath : Path) : void
-    + downloadObject(path : Path) : byte[]
-    + publishObject(obj : object) : void
+    + doesExist(objectKey: String) : boolean
+    + createObject(path: Path) : void
+    + downloadObject(key: String) : byte[]
+    + publishObject(key: String) : void
 }
 
 @enduml
