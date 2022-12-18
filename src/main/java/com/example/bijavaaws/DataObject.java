@@ -3,11 +3,11 @@ package com.example.bijavaaws;
 import java.nio.file.Path;
 
 public interface DataObject {
-    boolean doesExist(Path sourcePath);
+    boolean doesExist(Path path);
 
-    void createObject(Path sourcePath);
+    void createObject(Path path);
 
-    Object downloadObject(String path);
+    byte[] downloadObject(Path path);
 
     void publishObject(Object obj);
 }

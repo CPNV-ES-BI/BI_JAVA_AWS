@@ -28,30 +28,28 @@ public class DataObjectImpl implements DataObject {
     }
 
     @Override
-    public boolean doesExist(Path objectPath) {
+    public boolean doesExist(Path path) {
         try {
-            s3Client.headObject(builder -> builder.bucket(bucketName).key(getObjectName(objectPath)));
+            s3Client.headObject(builder -> builder.bucket(bucketName).key(getObjectName(path)));
             return true;
         } catch (NoSuchKeyException e) {
-            if (e.statusCode() == 404)
-                return false;
-            throw e;
+            return false;
         }
     }
 
     @Override
-    public void createObject(Path objectPath) {
-        String objectName = getObjectName(objectPath);
+    public void createObject(Path path) {
+        String objectName = getObjectName(path);
 
-        if (doesExist(objectPath))
+        if (doesExist(path))
             throw new ObjectAlreadyExistsException(objectName);
 
-        s3Client.putObject(builder -> builder.bucket(bucketName).key(objectName).build(), objectPath);
+        s3Client.putObject(builder -> builder.bucket(bucketName).key(objectName).build(), path);
     }
 
     @Override
-    public Object downloadObject(String path) {
-        throw new UnsupportedOperationException("Not implemented yet");
+    public byte[] downloadObject(Path path) {
+        return s3Client.getObjectAsBytes(builder -> builder.bucket(bucketName).key(getObjectName(path))).asByteArray();
     }
 
     @Override

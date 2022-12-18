@@ -1,7 +1,7 @@
 package com.example.bijavaaws;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
-import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.junit.jupiter.api.Assertions.fail;
@@ -20,6 +20,7 @@ import org.springframework.util.ResourceUtils;
 
 import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.nio.file.Files;
 import java.nio.file.Path;
 
 @ExtendWith(SpringExtension.class)
@@ -59,14 +60,14 @@ class DataObjectImplTest {
         Path notExistsPath = Path.of("not-exists");
 
         // When
-        boolean result = dataObject.doesExist(testFilePath);
+        boolean result = dataObject.doesExist(notExistsPath);
 
         // Then
         assertFalse(result);
     }
 
     @Test
-    void createObject_NominalCase_ObjectExists() throws IOException {
+    void createObject_NominalCase_ObjectExists() {
         // When
         dataObject.createObject(testFilePath);
 
@@ -75,7 +76,7 @@ class DataObjectImplTest {
     }
 
     @Test
-    void createObject_AlreadyExists_ThrowException() throws FileNotFoundException {
+    void createObject_AlreadyExists_ThrowException() {
         dataObject.createObject(testFilePath);
 
         // Then
@@ -98,28 +99,27 @@ class DataObjectImplTest {
     }
 
     @Test
-    void downloadObject_NominalCase_Downloaded() {
+    void downloadObject_NominalCase_Downloaded() throws IOException {
         // Given
-        Path sourcePath = Path.of("not-exists");
-        dataObject.createObject(sourcePath);
-        String path = "path";
+        dataObject.createObject(testFilePath);
+        byte[] expectedContent = Files.readAllBytes(testFilePath);
 
         // When
-        Object result = dataObject.downloadObject(path);
+        byte[] result = dataObject.downloadObject(testFilePath);
 
         // Then
-        assertNotNull(result);
+        assertEquals(expectedContent, result);
     }
 
     @Test
     void downloadObject_NotExists_ThrowException() {
         // Given
-        String path = "not-existing-path";
+        Path notExistsPath = Path.of("not-exists");
 
         // Then
         assertThrows(ObjectNotFoundException.class, () -> {
             // When
-            dataObject.downloadObject(path);
+            dataObject.downloadObject(notExistsPath);
         });
     }
 
