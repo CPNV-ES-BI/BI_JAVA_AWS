@@ -4,6 +4,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
+import java.nio.file.Path;
 import java.util.List;
 
 import software.amazon.awssdk.services.s3.S3Client;
@@ -35,8 +36,11 @@ public class DataObjectImpl implements DataObject {
     }
 
     @Override
-    public void createObject(Object obj) {
-        throw new UnsupportedOperationException("Not implemented yet");
+    public void createObject(Path sourcePath) {
+        s3Client.putObject(
+                builder -> builder.bucket(bucketName).key(sourcePath.getFileName().toString()),
+                sourcePath
+        );
     }
 
     @Override

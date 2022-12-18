@@ -6,12 +6,22 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.junit.jupiter.api.Assertions.fail;
 
+import com.example.bijavaaws.exceptions.ObjectAlreadyExistsException;
+import com.example.bijavaaws.exceptions.ObjectNotFoundException;
+
+import org.junit.jupiter.api.AfterEach;
+import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 import org.springframework.test.util.ReflectionTestUtils;
+import org.springframework.util.ResourceUtils;
+
+import java.io.FileNotFoundException;
+import java.io.IOException;
+import java.nio.file.Path;
 
 @ExtendWith(SpringExtension.class)
 @ContextConfiguration(classes = BIJavaAWS.class)
@@ -19,6 +29,18 @@ class DataObjectImplTest {
 
     @Autowired
     private DataObjectImpl dataObject;
+
+    private static Path testFilePath;
+
+    @BeforeAll
+    static void beforeAll() throws FileNotFoundException {
+        testFilePath = ResourceUtils.getFile("classpath:test-file.txt").toPath();
+    }
+
+    @AfterEach
+    void afterEach() {
+        // TODO : Remove the test file from the bucket
+    }
 
     @Test
     void doesExist_ExistsCase_True() {
@@ -45,37 +67,32 @@ class DataObjectImplTest {
     }
 
     @Test
-    void createObject_NominalCase_ObjectExists() {
-        // Given
-        Object obj = new Object();
-
+    void createObject_NominalCase_ObjectExists() throws IOException {
         // When
-        dataObject.createObject(obj);
+        dataObject.createObject(testFilePath);
 
         // Then
         assertTrue(dataObject.doesExist());
     }
 
     @Test
-    void createObject_AlreadyExists_ThrowException() {
-        // Given
-        Object obj = new Object();
-        dataObject.createObject(obj);
+    void createObject_AlreadyExists_ThrowException() throws FileNotFoundException {
+        dataObject.createObject(testFilePath);
 
         // Then
         assertThrows(Exception.class, () -> {
             // When
-            dataObject.createObject(obj);
+            dataObject.createObject(testFilePath);
         });
     }
 
     @Test
     void createObject_PathNotExists_ObjectExists() {
         // Given
-        Object obj = new Object();
+        Path sourcePath = Path.of("not-exists");
 
         // When
-        dataObject.createObject(obj);
+        dataObject.createObject(sourcePath);
 
         // Then
         assertTrue(dataObject.doesExist());
@@ -84,8 +101,8 @@ class DataObjectImplTest {
     @Test
     void downloadObject_NominalCase_Downloaded() {
         // Given
-        Object obj = new Object();
-        dataObject.createObject(obj);
+        Path sourcePath = Path.of("not-exists");
+        dataObject.createObject(sourcePath);
         String path = "path";
 
         // When
@@ -101,7 +118,7 @@ class DataObjectImplTest {
         String path = "not-existing-path";
 
         // Then
-        assertThrows(Exception.class, () -> {
+        assertThrows(ObjectNotFoundException.class, () -> {
             // When
             dataObject.downloadObject(path);
         });
@@ -125,7 +142,7 @@ class DataObjectImplTest {
         Object obj = new Object();
 
         // Then
-        assertThrows(Exception.class, () -> {
+        assertThrows(ObjectAlreadyExistsException.class, () -> {
             // When
             dataObject.publishObject(obj);
         });

@@ -1,9 +1,11 @@
 package com.example.bijavaaws;
 
+import java.nio.file.Path;
+
 public interface DataObject {
     boolean doesExist();
 
-    void createObject(Object obj);
+    void createObject(Path sourcePath);
 
     Object downloadObject(String path);
 

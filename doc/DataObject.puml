@@ -11,7 +11,7 @@ endlegend
 
 interface DataObject {
     + doesExist(obj : object) : boolean
-    + createObject(obj : object) : void
+    + createObject(sourcePath : Path) : void
     + downloadObject(path : string) : object
     + publishObject(obj : object) : void
 }
