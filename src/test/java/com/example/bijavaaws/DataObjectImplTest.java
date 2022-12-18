@@ -16,7 +16,6 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
-import org.springframework.test.util.ReflectionTestUtils;
 import org.springframework.util.ResourceUtils;
 
 import java.io.FileNotFoundException;
@@ -45,10 +44,10 @@ class DataObjectImplTest {
     @Test
     void doesExist_ExistsCase_True() {
         // Given
-        // bucketName in aws.properties file
+        dataObject.createObject(testFilePath);
 
         // When
-        boolean result = dataObject.doesExist();
+        boolean result = dataObject.doesExist(testFilePath);
 
         // Then
         assertTrue(result);
@@ -57,10 +56,10 @@ class DataObjectImplTest {
     @Test
     void doesExist_NotExists_False() {
         // Given
-        ReflectionTestUtils.setField(dataObject, "bucketName", "not-exists");
+        Path notExistsPath = Path.of("not-exists");
 
         // When
-        boolean result = dataObject.doesExist();
+        boolean result = dataObject.doesExist(testFilePath);
 
         // Then
         assertFalse(result);
@@ -72,7 +71,7 @@ class DataObjectImplTest {
         dataObject.createObject(testFilePath);
 
         // Then
-        assertTrue(dataObject.doesExist());
+        assertTrue(dataObject.doesExist(testFilePath));
     }
 
     @Test
@@ -95,7 +94,7 @@ class DataObjectImplTest {
         dataObject.createObject(sourcePath);
 
         // Then
-        assertTrue(dataObject.doesExist());
+        assertTrue(dataObject.doesExist(testFilePath));
     }
 
     @Test

@@ -10,7 +10,7 @@ legend top
 endlegend
 
 interface DataObject {
-    + doesExist(obj : object) : boolean
+    + doesExist(objectPath : Path) : boolean
     + createObject(sourcePath : Path) : void
     + downloadObject(path : string) : object
     + publishObject(obj : object) : void

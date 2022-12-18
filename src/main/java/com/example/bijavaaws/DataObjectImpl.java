@@ -9,7 +9,7 @@ import java.util.List;
 
 import software.amazon.awssdk.services.s3.S3Client;
 import software.amazon.awssdk.services.s3.model.Bucket;
-import software.amazon.awssdk.services.s3.model.NoSuchBucketException;
+import software.amazon.awssdk.services.s3.model.NoSuchKeyException;
 
 @Component
 public class DataObjectImpl implements DataObject {
@@ -26,20 +26,22 @@ public class DataObjectImpl implements DataObject {
     }
 
     @Override
-    public boolean doesExist() {
+    public boolean doesExist(Path objectPath) {
         try {
-            s3Client.headBucket(builder -> builder.bucket(bucketName));
+            s3Client.headObject(builder -> builder.bucket(bucketName).key(objectPath.getFileName().toString()));
             return true;
-        } catch (NoSuchBucketException e) {
-            return false;
+        } catch (NoSuchKeyException e) {
+            if (e.statusCode() == 404)
+                return false;
+            throw e;
         }
     }
 
     @Override
-    public void createObject(Path sourcePath) {
+    public void createObject(Path objectPath) {
         s3Client.putObject(
-                builder -> builder.bucket(bucketName).key(sourcePath.getFileName().toString()),
-                sourcePath
+                builder -> builder.bucket(bucketName).key(objectPath.getFileName().toString()),
+                objectPath
         );
     }
 
