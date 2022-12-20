@@ -5,6 +5,7 @@ import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
+import com.example.bijavaaws.exceptions.ObjectAlreadyExistsException;
 import com.example.bijavaaws.exceptions.ObjectNotFoundException;
 
 import org.junit.jupiter.api.AfterEach;
@@ -21,6 +22,7 @@ import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
+import java.util.concurrent.Callable;
 
 @ExtendWith(SpringExtension.class)
 @ContextConfiguration(classes = BIJavaAWS.class)
@@ -75,7 +77,7 @@ class DataObjectImplTest {
     @Test
     void createObject_NominalCase_ObjectExists() {
         // When
-        // createObject() is called in beforeEach()
+        // createObject is called in beforeEach()
 
         // Then
         assertTrue(dataObject.doesExist(objectKey));
@@ -83,11 +85,14 @@ class DataObjectImplTest {
 
     @Test
     void createObject_AlreadyExists_ThrowException() {
-        // Then
-        assertThrows(Exception.class, () -> {
-            // When
+        // When
+        Callable<Void> createObject = () -> {
             dataObject.createObject(testFilePath);
-        });
+            return null;
+        };
+
+        // Then
+        assertThrows(ObjectAlreadyExistsException.class, createObject::call);
     }
 
     @Test
@@ -119,18 +124,18 @@ class DataObjectImplTest {
         // Given
         String objectKey = "not-exists";
 
-        // Then
-        assertThrows(ObjectNotFoundException.class, () -> {
-            // When
+        // When
+        Callable<Void> downloadObject = () -> {
             dataObject.downloadObject(objectKey);
-        });
+            return null;
+        };
+
+        // Then
+        assertThrows(ObjectNotFoundException.class, downloadObject::call);
     }
 
     @Test
     void publishObject_NominalCase_ObjectPublished() {
-        // Given
-        // createObject() is called in beforeEach()
-
         // When
         dataObject.publishObject(objectKey);
 
@@ -143,10 +148,13 @@ class DataObjectImplTest {
         // Given
         String objectKey = "not-exists";
 
-        // Then
-        assertThrows(ObjectNotFoundException.class, () -> {
-            // When
+        // When
+        Callable<Void> publishObject = () -> {
             dataObject.publishObject(objectKey);
-        });
+            return null;
+        };
+
+        // Then
+        assertThrows(ObjectNotFoundException.class, publishObject::call);
     }
 }
