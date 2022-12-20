@@ -40,7 +40,7 @@ class Exception
 
 interface S3Client
 
-DataObject <|-- DataObjectImpl
+DataObject <|.. DataObjectImpl
 
 DataObjectImpl ..> ObjectAlreadyExistsException : throws
 DataObjectImpl ..> ObjectNotFoundException : throws
