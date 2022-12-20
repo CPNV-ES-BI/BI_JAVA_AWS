@@ -1,0 +1,25 @@
+@startuml
+
+legend top left
+    Project
+        BI_JAVA_AWS
+    Diagram
+        createObject sequence [DataObject]
+    Authors
+        Yannick Baudraz
+endlegend
+
+actor "Client service" as CS
+
+participant "DataObject" as DO
+participant S3Client
+
+CS -> DO: createObject(Path path)
+DO -> DO: doesExist(String objectKey)
+alt doesExist returns true
+    DO -> CS: throw ObjectAlreadyExistsException(objectKey)
+else
+    DO -> S3Client: putObject(Builder builder, Path path)
+end
+
+@enduml
