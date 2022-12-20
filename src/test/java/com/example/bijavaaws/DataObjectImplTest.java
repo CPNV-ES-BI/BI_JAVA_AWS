@@ -53,9 +53,6 @@ class DataObjectImplTest {
 
     @Test
     void doesExist_ExistsCase_True() {
-        // Given
-        // createObject() is called in beforeEach()
-
         // When
         boolean result = dataObject.doesExist(objectKey);
 
@@ -86,9 +83,6 @@ class DataObjectImplTest {
 
     @Test
     void createObject_AlreadyExists_ThrowException() {
-        // Given
-        // createObject() is called in beforeEach()
-
         // Then
         assertThrows(Exception.class, () -> {
             // When
@@ -111,14 +105,13 @@ class DataObjectImplTest {
     @Test
     void downloadObject_NominalCase_Downloaded() throws IOException {
         // Given
-        // createObject() is called in beforeEach()
-        byte[] expectedContent = Files.readAllBytes(testFilePath);
+        String expectedContent = Files.readString(testFilePath);
 
         // When
         byte[] result = dataObject.downloadObject(objectKey);
 
         // Then
-        assertEquals(expectedContent, result);
+        assertEquals(expectedContent, new String(result));
     }
 
     @Test
