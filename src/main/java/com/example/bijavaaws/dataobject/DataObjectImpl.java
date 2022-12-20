@@ -1,4 +1,4 @@
-package com.example.bijavaaws;
+package com.example.bijavaaws.dataobject;
 
 import com.example.bijavaaws.exceptions.ObjectAlreadyExistsException;
 import com.example.bijavaaws.exceptions.ObjectNotFoundException;
@@ -32,7 +32,7 @@ public class DataObjectImpl implements DataObject {
      *
      * @return List of buckets.
      */
-    List<Bucket> listBuckets() {
+    public List<Bucket> listBuckets() {
         return s3Client.listBuckets().buckets();
     }
 

@@ -135,6 +135,10 @@ docker compose up test --build
 make docker-up-test
 ```
 
+## Folder structure
+
+See the [folder structure](doc/FOLDER_STRUCTURE.md) documentation.
+
 ## Contributing
 
 We welcome contributions to this project! If you have an idea for a new feature or have found a bug, please open
@@ -154,7 +158,7 @@ Thank you for considering contributing to this project!
 
 ## License
 
-Distribution is permitted under the terms of the [MIT License](LICENSE).
+Distribution is permitted under the terms of the [MIT License](LICENSE.md).
 
 ## Contact
 

@@ -1,10 +1,11 @@
-package com.example.bijavaaws;
+package com.example.bijavaaws.dataobject;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
+import com.example.bijavaaws.BIJavaAWS;
 import com.example.bijavaaws.exceptions.ObjectAlreadyExistsException;
 import com.example.bijavaaws.exceptions.ObjectNotFoundException;
 
