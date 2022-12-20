@@ -1,0 +1,52 @@
+@startuml class_diagram
+'https://plantuml.com/class-diagram
+
+legend top left
+    Project
+        BI_JAVA_AWS
+    Diagram
+        Class
+    Authors
+        Yannick Baudraz
+        Anthony Bouillant
+endlegend
+
+package BI_JAVA_AWS {
+    interface DataObject {
+        + doesExist(objectKey: String) : boolean
+        + createObject(path: Path) : void
+        + downloadObject(key: String) : byte[]
+        + publishObject(key: String) : URL
+    }
+
+    class DataObjectImpl {
+        - s3Client: S3Client
+        - bucketName: String
+        + listBuckets(): List<Bucket>
+        + deleteObject(objectKey: String, isRecursive: boolean) : void
+    }
+
+    class ObjectAlreadyExistsException {
+        + ObjectAlreadyExistsException(objectKey: String)
+    }
+
+    class ObjectNotFoundException {
+        + ObjectNotFoundException(objectKey: String)
+    }
+}
+
+class Exception
+
+interface S3Client
+
+DataObject <|.. DataObjectImpl
+
+DataObjectImpl ..> ObjectAlreadyExistsException : throws
+DataObjectImpl ..> ObjectNotFoundException : throws
+
+ObjectAlreadyExistsException --|> Exception
+ObjectNotFoundException --|> Exception
+
+DataObjectImpl *- S3Client
+
+@enduml
