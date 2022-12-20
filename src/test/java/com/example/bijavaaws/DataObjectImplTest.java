@@ -26,21 +26,24 @@ import java.nio.file.Path;
 @ContextConfiguration(classes = BIJavaAWS.class)
 class DataObjectImplTest {
 
+    private static Path testFilePath;
+    private static String objectKey;
+
     @Autowired
     private DataObjectImpl dataObject;
-
-    private static Path testFilePath;
-    private String objectKey;
 
     @BeforeAll
     static void beforeAll() throws FileNotFoundException {
         testFilePath = ResourceUtils.getFile("classpath:test-file.txt").toPath();
+        objectKey = testFilePath.getFileName().toString();
     }
 
     @BeforeEach
     void beforeEach() {
+        if (dataObject.doesExist(objectKey))
+            dataObject.deleteObject(objectKey);
+
         dataObject.createObject(testFilePath);
-        objectKey = testFilePath.getFileName().toString();
     }
 
     @AfterEach
