@@ -1,5 +1,6 @@
 package com.example.bijavaaws;
 
+import java.net.URL;
 import java.nio.file.Path;
 
 public interface DataObject {
@@ -9,5 +10,5 @@ public interface DataObject {
 
     byte[] downloadObject(String key);
 
-    void publishObject(String key);
+    URL publishObject(String key);
 }

@@ -16,15 +16,14 @@ package BI_JAVA_AWS {
         + doesExist(objectKey: String) : boolean
         + createObject(path: Path) : void
         + downloadObject(key: String) : byte[]
-        + publishObject(key: String) : void
+        + publishObject(key: String) : URL
     }
 
     class DataObjectImpl {
         - s3Client: S3Client
         - bucketName: String
         + listBuckets(): List<Bucket>
-        + isPublic(objectKey: String) : boolean
-        + deleteObject(objectKey: String) : void
+        + deleteObject(objectKey: String, isRecursive: boolean) : void
     }
 
     class ObjectAlreadyExistsException {
@@ -48,6 +47,6 @@ DataObjectImpl ..> ObjectNotFoundException : throws
 ObjectAlreadyExistsException --|> Exception
 ObjectNotFoundException --|> Exception
 
-DataObjectImpl *-- S3Client
+DataObjectImpl *- S3Client
 
 @enduml

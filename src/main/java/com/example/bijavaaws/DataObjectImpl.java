@@ -7,17 +7,15 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
+import java.net.URL;
 import java.nio.file.Path;
 import java.util.List;
 
 import software.amazon.awssdk.services.s3.S3Client;
 import software.amazon.awssdk.services.s3.model.Bucket;
-import software.amazon.awssdk.services.s3.model.GetObjectAclResponse;
 import software.amazon.awssdk.services.s3.model.NoSuchKeyException;
-import software.amazon.awssdk.services.s3.model.ObjectCannedACL;
-import software.amazon.awssdk.services.s3.model.Permission;
-import software.amazon.awssdk.services.s3.model.PutObjectAclRequest;
-import software.amazon.awssdk.services.s3.model.Type;
+import software.amazon.awssdk.services.s3.presigner.S3Presigner;
+import software.amazon.awssdk.services.s3.presigner.model.PresignedGetObjectRequest;
 
 @Component
 public class DataObjectImpl implements DataObject {
@@ -89,35 +87,23 @@ public class DataObjectImpl implements DataObject {
      * Makes an object public.
      *
      * @param key the object key.
+     * @return the object public URL.
      * @throws ObjectNotFoundException if the object does not exist.
      */
     @Override
-    public void publishObject(String key) {
+    public URL publishObject(String key) {
         if (!doesExist(key))
             throw new ObjectNotFoundException(key);
 
-        PutObjectAclRequest putRequest = PutObjectAclRequest.builder()
-                .bucket(bucketName)
-                .key(key)
-                .acl(ObjectCannedACL.PUBLIC_READ)
-                .build();
+        PresignedGetObjectRequest presignedGetObjectRequest;
+        try (S3Presigner s3Presigner = S3Presigner.create()) {
+            presignedGetObjectRequest = s3Presigner.presignGetObject(presignBuilder -> presignBuilder
+                    .signatureDuration(java.time.Duration.ofMinutes(5))
+                    .getObjectRequest(getObjectBuilder -> getObjectBuilder.bucket(bucketName).key(key).build())
+            );
+        }
 
-        s3Client.putObjectAcl(putRequest);
-    }
-
-    /**
-     * Tells if an object is public.
-     *
-     * @param objectKey the object key.
-     * @return true if the object is public, false otherwise.
-     */
-    public boolean isPublic(String objectKey) {
-        GetObjectAclResponse response = s3Client.getObjectAcl(builder -> builder.bucket(bucketName).key(objectKey));
-
-        return response.grants().stream()
-                .anyMatch(grant -> grant.permission().equals(Permission.READ)
-                        && grant.grantee().type().equals(Type.GROUP)
-                        && grant.grantee().uri().equals("http://acs.amazonaws.com/groups/global/AllUsers"));
+        return presignedGetObjectRequest.url();
     }
 
     /**
@@ -126,6 +112,22 @@ public class DataObjectImpl implements DataObject {
      * @param key the object key.
      */
     public void deleteObject(String key) {
-        s3Client.deleteObject(builder -> builder.bucket(bucketName).key(key));
+        deleteObject(key, false);
+    }
+
+    /**
+     * Deletes an object.
+     *
+     * @param key         the object key.
+     * @param isRecursive if true, the object will be deleted recursively.
+     */
+    public void deleteObject(String key, boolean isRecursive) {
+        if (isRecursive)
+            s3Client.listObjects(builder -> builder.bucket(bucketName).prefix(key))
+                    .contents()
+                    .forEach(s3Object -> s3Client.deleteObject(builder -> builder.bucket(bucketName).key(s3Object.key())));
+        else {
+            s3Client.deleteObject(builder -> builder.bucket(bucketName).key(key));
+        }
     }
 }

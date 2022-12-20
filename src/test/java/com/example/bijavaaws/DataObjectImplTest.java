@@ -20,6 +20,7 @@ import org.springframework.util.ResourceUtils;
 
 import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.net.URL;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.concurrent.Callable;
@@ -135,12 +136,16 @@ class DataObjectImplTest {
     }
 
     @Test
-    void publishObject_NominalCase_ObjectPublished() {
+    void publishObject_NominalCase_ObjectPublished() throws IOException {
+        // Given
+        String expectedContent = Files.readString(testFilePath);
+
         // When
-        dataObject.publishObject(objectKey);
+        URL objectUrl = dataObject.publishObject(objectKey);
 
         // Then
-        assertTrue(dataObject.isPublic(objectKey));
+        byte[] objectContent = objectUrl.openConnection().getInputStream().readAllBytes();
+        assertEquals(expectedContent, new String(objectContent));
     }
 
     @Test
