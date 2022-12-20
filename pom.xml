@@ -9,7 +9,7 @@
         <relativePath/> <!-- lookup parent from repository -->
     </parent>
     <groupId>com.example</groupId>
-    <artifactId>spring-docker-demo</artifactId>
+    <artifactId>bi-java-aws</artifactId>
     <version>0.0.1-SNAPSHOT</version>
     <name>bi-java-aws</name>
     <description>Spring boot microservice using docker</description>

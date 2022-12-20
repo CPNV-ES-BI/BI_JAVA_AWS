@@ -1,21 +1,24 @@
 # BI Java AWS
 
-## Table of Contents
-
 * [BI Java AWS](#bi-java-aws)
-    * [Table of Contents](#table-of-contents)
     * [Introduction](#introduction)
     * [Requirements](#requirements)
     * [Configuration](#configuration)
         * [AWS properties](#aws-properties)
-    * [Docker](#docker)
-    * [Local](#local)
+    * [Installation](#installation)
     * [Usage](#usage)
+    * [Tests](#tests)
+    * [Docker](#docker)
+    * [Contributing](#contributing)
+    * [License](#license)
+    * [Contact](#contact)
+        * [Authors](#authors)
+        * [Reviewers](#reviewers)
 
 ## Introduction
 
-This is a Spring Boot microservice that can be run as a Docker container.
-It is a simple REST API that returns 'Hello World'.
+This is a Spring Boot microservice whose objective is to implement [AWS S3](https://aws.amazon.com/s3/) as a data
+source, in order to perform various techniques related to Business Intelligence.
 
 ## Requirements
 
@@ -35,19 +38,88 @@ The configuration is done through properties files. They are located in the `src
 
 Copy the `aws.example.properties` file and rename it to `aws.properties`.
 
+```bash
+cp src/main/resources/aws.example.properties src/main/resources/aws.properties
+```
+
 <span style="color:red">**NOTE:**</span> The `aws.properties` contains sensitive information and should not be committed
 to the repository.
 
-| Property Name       | Description                          |
-|---------------------|--------------------------------------|
-| aws.region          | AWS region                           |
-| aws.accessKeyId     | S3 key id                            |
-| aws.secretAccessKey | S3 secret name                       |
-| aws.bucketName      | S3 bucket name to use in the service |
+Fill in the `aws.properties` file with the following information:
+
+| Property Name       | Description                              | Example Value                            |
+|---------------------|------------------------------------------|------------------------------------------|
+| aws.region          | AWS region                               | us-east-1                                |
+| aws.accessKeyId     | S3 key id                                | AKIAIOSFODNN7EXAMPLE                     |
+| aws.secretAccessKey | S3 secret name                           | wJalrXUtnFEMI/K7MDENG/bPxRfiCYEXAMPLEKEY |
+| aws.bucketName      | S3 bucket name to use inside the service | my-bucket                                |
+
+## Installation
+
+Install dependencies:
+
+```bash
+mvn dependency:resolve
+```
+
+Build the project:
+
+```bash
+# Skip tests to speed up the build
+mvn clean package -DskipTests
+```
+
+Run the project:
+
+```bash
+mvn spring-boot:run
+```
+
+## Usage
+
+The base url is `http://localhost:8080`.
+
+All available endpoints:
+
+| Endpoint         | Description                                                        |
+|------------------|--------------------------------------------------------------------|
+| /                | Hello World                                                        |
+| /buckets         | List all s3 buckets of the region based on the aws properties file |
+| /actuator/health | Health check                                                       |
+
+## Tests
+
+Run the tests:
+
+```bash
+mvn clean test
+```
+
+Run a specific test:
+
+```bash
+mvn clean test -Dtest=TestClassName#methodName
+```
+
+[//]: # (TODO : add test coverage section)
 
 ## Docker
 
-To build and run the Docker container, run the following command:
+You can also run the project/tests using Docker.
+
+Build the Docker image:
+
+```bash
+docker compose build development
+```
+
+Run the docker image:
+
+```bash
+docker compose up development
+```
+
+Run the docker image and build in the same time:
 
 ```bash
 docker compose up development --build
@@ -55,54 +127,12 @@ docker compose up development --build
 make docker-up
 ```
 
-To build and test the Docker container, run the following command:
+Run the tests:
 
 ```bash
 docker compose up test --build
 # or
 make docker-up-test
-```
-
-## Local
-
-To install the dependencies, run the following command:
-
-```bash
-mvn dependency:resolve
-```
-
-To run the application in local, run the following command:
-
-```bash
-mvn spring-boot:run
-```
-
-To run the tests in local, run the following command:
-
-```bash
-mvn test
-```
-
-To run a specific test, run the following command:
-
-```bash
-mvn test -Dtest=TestClassName#methodName
-```
-
-## Usage
-
-To get the 'Hello World' message, run the following command, or open the url in a browser.
-
-```bash
-curl http://localhost:8080
-```
-
-## Test
-
-To run the tests in local, run the following command:
-
-```bash
-mvn test
 ```
 
 ## Contributing
