@@ -12,22 +12,14 @@ jobs:
     runs-on: ubuntu-latest
     env:
       COMPOSE_FILE: ./docker-compose.yml
+      aws.region: ${{ secrets.AWS_REGION }}
+      aws.access_key_id: ${{ secrets.AWS_ACCESSKEYID }}
+      aws.secret_access_key: ${{ secrets.AWS_SECRETACCESSKEY }}
+      aws.bucketName: ${{ secrets.AWS_BUCKETNAME }}
 
     steps:
-      - name: Write value to Properties-file
-        uses: christian-draeger/write-properties@1.1.0
-        with:
-          path: './src/main/resources/aws.properties'
-          property: |
-            'aws.region'
-            'aws.accessKeyId'
-            'aws.secretAccessKey'
-            'aws.bucketName'
-          value: |
-            '${{ secrets.AWS_REGION }}'
-            '${{ secrets.AWS_ACCESSKEYID }}'
-            '${{ secrets.AWS_SECRETACCESSKEY }}'
-            '${{ secrets.AWS_BUCKETNAME }}'
+      - name: Create aws.properties file
+        run: touch ./src/main/resources/aws.properties
 
       - name: Checkout code
         uses: actions/checkout@v3
