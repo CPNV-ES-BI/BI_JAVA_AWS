@@ -12,6 +12,11 @@ jobs:
     runs-on: ubuntu-latest
     env:
       COMPOSE_FILE: ./docker-compose.yml
+      aws:
+        region: ${{ secrets.AWS_REGION }}
+        access_key_id: ${{ secrets.AWS_ACCESSKEYID }}
+        secret_access_key: ${{ secrets.AWS_SECRETACCESSKEY }}
+        bucketName: ${{ secrets.AWS_BUCKETNAME }}
 
     steps:
       - name: Checkout code
