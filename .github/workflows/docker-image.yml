@@ -22,7 +22,11 @@ jobs:
         uses: actions/checkout@v3
 
       - name: Create aws.properties file from secrets
-        run: touch ./src/main/resources/aws.properties
+        run: |
+          echo "aws.region=${aws.region}" >> ./src/main/resources/aws.properties
+          echo "aws.secretAccessKey=${aws.access_key_id}" >> ./src/main/resources/aws.properties
+          echo "aws.accessKeyId=${aws.secret_access_key}" >> ./src/main/resources/aws.properties
+          echo "aws.bucketName=${aws.bucketName}" >> ./src/main/resources/aws.properties
 
       - name: Build docker images
         run: docker-compose build
