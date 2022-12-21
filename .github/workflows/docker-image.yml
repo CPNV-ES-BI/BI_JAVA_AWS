@@ -12,10 +12,6 @@ jobs:
     runs-on: ubuntu-latest
     env:
       COMPOSE_FILE: ./docker-compose.yml
-      aws.region: ${{ secrets.AWS_REGION }}
-      aws.access_key_id: ${{ secrets.AWS_ACCESSKEYID }}
-      aws.secret_access_key: ${{ secrets.AWS_SECRETACCESSKEY }}
-      aws.bucketName: ${{ secrets.AWS_BUCKETNAME }}
 
     steps:
       - name: Checkout code
@@ -23,10 +19,10 @@ jobs:
 
       - name: Create aws.properties file from secrets
         run: |
-          echo "aws.region=${aws.region}" >> ./src/main/resources/aws.properties
-          echo "aws.secretAccessKey=${aws.access_key_id}" >> ./src/main/resources/aws.properties
-          echo "aws.accessKeyId=${aws.secret_access_key}" >> ./src/main/resources/aws.properties
-          echo "aws.bucketName=${aws.bucketName}" >> ./src/main/resources/aws.properties
+          echo "aws.region=${{ secrets.AWS_REGION }}" >> ./src/main/resources/aws.properties
+          echo "aws.secretAccessKey=${{ secrets.AWS_ACCESSKEYID }}" >> ./src/main/resources/aws.properties
+          echo "aws.accessKeyId=${{ secrets.AWS_SECRETACCESSKEY }}" >> ./src/main/resources/aws.properties
+          echo "aws.bucketName=${{ secrets.AWS_BUCKETNAME }}" >> ./src/main/resources/aws.properties
 
       - name: Build docker images
         run: docker-compose build
