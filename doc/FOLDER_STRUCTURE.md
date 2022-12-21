@@ -6,7 +6,7 @@
 |   docker-compose.yml
 |   FOLDER_STRUCTURE.md
 |   LICENSE.md
-|   Makefile
+|   GNUmakefile
 |   mvnw
 |   mvnw.cmd
 |   pom.xml
@@ -76,7 +76,7 @@ Here is an explanation of the purpose of folders and files in the directory stru
   the services that make up your application and how they should be deployed and run.
 - `FOLDER_STRUCTURE.md`: The file you are reading right now. It contains the folder structure of the project.
 - `LICENSE.md`: Likely contains information about the license under which the project is released.
-- `Makefile`: Is used to define commands that can be run from the command line to automate tasks. It is
+- `GNUmakefile`: Is used to define commands that can be run from the command line to automate tasks. It is
   typically used to build and test software projects, but can be used for any kind of automation.
 - `mvnw` and `mvnw.cmd`: These files are used to run Maven commands from the command line. `mvnw` is for Unix-based
   systems, while `mvnw.cmd` is for Windows. It allows you to run Maven commands without having to install it.
