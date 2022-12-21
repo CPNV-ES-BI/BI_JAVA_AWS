@@ -12,20 +12,25 @@ jobs:
     runs-on: ubuntu-latest
     env:
       COMPOSE_FILE: ./docker-compose.yml
-      aws.region: ${{ secrets.AWS_REGION }}
-      aws.access_key_id: ${{ secrets.AWS_ACCESSKEYID }}
-      aws.secret_access_key: ${{ secrets.AWS_SECRETACCESSKEY }}
-      aws.bucketName: ${{ secrets.AWS_BUCKETNAME }}
+      PROPERTY_FILE: src/main/resources/aws.properties
 
     steps:
       - name: Checkout code
         uses: actions/checkout@v3
 
-      - name: Create aws.properties file
-        run: touch ./src/main/resources/aws.properties
+      - name: Setup java
+        uses: actions/setup-java@v3
+        with:
+          distribution: 'temurin'
+          java-version: '17'
+          cache: 'maven'
 
-      - name: Build docker images
-        run: docker-compose build
+      - name: Set environment variables
+        run: |
+          echo "aws.region=${{ secrets.AWS_REGION }}" >> $PROPERTY_FILE \
+          echo "aws.accessKeyId=${{ secrets.AWS_ACCESS_KEY_ID }}" >> $PROPERTY_FILE \
+          echo "aws.secretAccessKey=${{ secrets.AWS_SECRET_ACCESS_KEY }}" >> $PROPERTY_FILE \
+          echo "aws.AWS_BUCKETNAME=${{ secrets.AWS_BUCKET_NAME }}" >> $PROPERTY_FILE \
 
-      - name: Run tests
-        run: docker-compose run test
+      - name: Build and test
+        run: mvn clean test
