@@ -18,11 +18,11 @@ jobs:
       aws.bucketName: ${{ secrets.AWS_BUCKETNAME }}
 
     steps:
-      - name: Create aws.properties file
-        run: touch ./src/main/resources/aws.properties
-
       - name: Checkout code
         uses: actions/checkout@v3
+
+      - name: Create aws.properties file
+        run: touch ./src/main/resources/aws.properties
 
       - name: Build docker images
         run: docker-compose build
