@@ -1,0 +1,35 @@
+@startuml DataObject_publishObject
+'https://plantuml.com/sequence-diagram
+
+legend top left
+    Project
+        BI_JAVA_AWS
+    Diagram
+        publishObject sequence [DataObject]
+    Authors
+        Yannick Baudraz
+endlegend
+
+
+actor "Client Service" as CLient
+
+participant DataObject
+participant S3Presigner
+
+
+CLient -> DataObject: publishObject(key)
+
+DataObject -> DataObject: doesExist(objectKey)
+alt false
+    DataObject -> CLient: throw ObjectNotFoundException(key)
+else
+    create S3Presigner
+    DataObject -> S3Presigner: create()
+
+    DataObject -> S3Presigner: presignGetObject(presignBuilder)
+    S3Presigner --> DataObject: presignedGetObjectRequest
+
+    DataObject --> CLient: url
+end
+
+@enduml

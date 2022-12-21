@@ -11,15 +11,13 @@ legend top left
         Anthony Bouillant
 endlegend
 
-autonumber
-
-actor Client
+actor "Client Service" as Client
 
 participant DataObject
 participant S3Client
 
 Client -> DataObject : doesExist(objectKey)
-DataObject -> S3Client : headObject(builder)
+DataObject -> S3Client : headObject(headObjectRequest)
 alt NoSuchKeyException
     S3Client -> DataObject : NoSuchKeyException
     DataObject -> Client : false

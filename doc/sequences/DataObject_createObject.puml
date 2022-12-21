@@ -1,4 +1,5 @@
-@startuml
+@startuml DataObject_createObject
+'https://plantuml.com/sequence-diagram
 
 legend top left
     Project
@@ -9,17 +10,17 @@ legend top left
         Yannick Baudraz
 endlegend
 
-actor "Client service" as CS
+actor "Client Service" as Client
 
-participant "DataObject" as DO
+participant DataObject
 participant S3Client
 
-CS -> DO: createObject(Path path)
-DO -> DO: doesExist(String objectKey)
-alt doesExist returns true
-    DO -> CS: throw ObjectAlreadyExistsException(objectKey)
+Client -> DataObject: createObject(path)
+DataObject -> DataObject: doesExist(objectKey)
+alt true
+    DataObject -> Client: throw ObjectAlreadyExistsException(objectKey)
 else
-    DO -> S3Client: putObject(Builder builder, Path path)
+    DataObject -> S3Client: putObject(putObjectRequest, path)
 end
 
 @enduml
