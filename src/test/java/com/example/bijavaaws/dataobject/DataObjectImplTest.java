@@ -9,7 +9,6 @@ import com.example.bijavaaws.BIJavaAWS;
 import com.example.bijavaaws.exceptions.ObjectAlreadyExistsException;
 import com.example.bijavaaws.exceptions.ObjectNotFoundException;
 
-import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -24,35 +23,31 @@ import java.io.IOException;
 import java.net.URL;
 import java.nio.file.Files;
 import java.nio.file.Path;
+import java.text.MessageFormat;
 import java.util.concurrent.Callable;
 
 @ExtendWith(SpringExtension.class)
 @ContextConfiguration(classes = BIJavaAWS.class)
 class DataObjectImplTest {
 
-    private static Path testFilePath;
-    private static String objectKey;
-
     @Autowired
     private DataObjectImpl dataObject;
 
+    private static Path testFilePath;
+
+    private String objectKey;
+
     @BeforeAll
     static void beforeAll() throws FileNotFoundException {
-        testFilePath = ResourceUtils.getFile("classpath:test-file.txt").toPath();
-        objectKey = testFilePath.getFileName().toString();
+        testFilePath = ResourceUtils.getFile("classpath:data/test-file.txt").toPath();
     }
 
     @BeforeEach
     void beforeEach() {
-        if (dataObject.doesExist(objectKey))
-            dataObject.deleteObject(objectKey);
+        objectKey = testFilePath.getFileName().toString();
+        deleteObjectIfExists(objectKey);
 
         dataObject.createObject(testFilePath);
-    }
-
-    @AfterEach
-    void afterEach() {
-        dataObject.deleteObject(objectKey);
     }
 
     @Test
@@ -67,7 +62,7 @@ class DataObjectImplTest {
     @Test
     void doesExist_NotExists_False() {
         // Given
-        String objectKey = "not-exists";
+        objectKey = "not-exists";
 
         // When
         boolean result = dataObject.doesExist(objectKey);
@@ -100,10 +95,11 @@ class DataObjectImplTest {
     @Test
     void createObject_PathNotExists_ObjectExists() {
         // Given
-        Path sourcePath = Path.of("not-exists");
+        objectKey = "level1/level2/level3/" + objectKey;
+        deleteObjectIfExists(objectKey);
 
         // When
-        dataObject.createObject(sourcePath);
+        dataObject.createObject(testFilePath, objectKey);
 
         // Then
         assertTrue(dataObject.doesExist(objectKey));
@@ -124,7 +120,7 @@ class DataObjectImplTest {
     @Test
     void downloadObject_NotExists_ThrowException() {
         // Given
-        String objectKey = "not-exists";
+        objectKey = "not-exists";
 
         // When
         Callable<Void> downloadObject = () -> {
@@ -152,7 +148,7 @@ class DataObjectImplTest {
     @Test
     void publishObject_ObjectNotFound_ThrowException() {
         // Given
-        String objectKey = "not-exists";
+        objectKey = "not-exists";
 
         // When
         Callable<Void> publishObject = () -> {
@@ -162,5 +158,50 @@ class DataObjectImplTest {
 
         // Then
         assertThrows(ObjectNotFoundException.class, publishObject::call);
+    }
+
+    @Test
+    void deleteObject_ObjectExists_ObjectDeleted() {
+        // When
+        dataObject.deleteObject(objectKey);
+
+        // Then
+        assertFalse(dataObject.doesExist(objectKey));
+    }
+
+    @Test
+    void deleteObject_ObjectContainingSubObjectsExists_ObjectDeletedRecursively() {
+        // Given
+        String keyToDelete = "level1";
+        objectKey = MessageFormat.format("{0}/level2/level3/{1}", keyToDelete, objectKey);
+        deleteObjectIfExists(objectKey);
+        dataObject.createObject(testFilePath, objectKey);
+        boolean isRecursive = true;
+
+        // When
+        dataObject.deleteObject(keyToDelete, isRecursive);
+
+        // Then
+        assertFalse(dataObject.doesExist(objectKey));
+    }
+
+    @Test
+    void deleteObject_ObjectDoesntExist_ThrowException() {
+        // Given
+        objectKey = "not-exists";
+
+        // When
+        Callable<Void> deleteObject = () -> {
+            dataObject.deleteObject(objectKey);
+            return null;
+        };
+
+        // Then
+        assertThrows(ObjectNotFoundException.class, deleteObject::call);
+    }
+
+    private void deleteObjectIfExists(String objectKey) {
+        if (dataObject.doesExist(objectKey))
+            dataObject.deleteObject(objectKey);
     }
 }

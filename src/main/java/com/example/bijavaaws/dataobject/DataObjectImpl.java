@@ -9,10 +9,8 @@ import org.springframework.stereotype.Component;
 
 import java.net.URL;
 import java.nio.file.Path;
-import java.util.List;
 
 import software.amazon.awssdk.services.s3.S3Client;
-import software.amazon.awssdk.services.s3.model.Bucket;
 import software.amazon.awssdk.services.s3.model.NoSuchKeyException;
 import software.amazon.awssdk.services.s3.presigner.S3Presigner;
 import software.amazon.awssdk.services.s3.presigner.model.PresignedGetObjectRequest;
@@ -26,15 +24,6 @@ public class DataObjectImpl implements DataObject {
 
     @Value("${aws.bucketName}")
     private String bucketName;
-
-    /**
-     * List all buckets.
-     *
-     * @return List of buckets.
-     */
-    public List<Bucket> listBuckets() {
-        return s3Client.listBuckets().buckets();
-    }
 
     /**
      * Checks if the object exists.
@@ -55,17 +44,27 @@ public class DataObjectImpl implements DataObject {
     /**
      * Creates and store an object. The future object key is the file name in the path.
      *
-     * @param path the path to the file to be uploaded.
+     * @param sourcePath the path of the object to be uploaded.
+     * @throws ObjectAlreadyExistsException if the object already exists.
+     */
+    public void createObject(Path sourcePath) {
+        String objectKey = sourcePath.getFileName().toString();
+        createObject(sourcePath, objectKey);
+    }
+
+    /**
+     * Creates and store an object. The future object key is the file name in the path.
+     *
+     * @param sourcePath the path of the object to be uploaded.
+     * @param objectKey  the path to the destination file.
      * @throws ObjectAlreadyExistsException if the object already exists.
      */
     @Override
-    public void createObject(Path path) {
-        String objectKey = path.getFileName().toString();
-
+    public void createObject(Path sourcePath, String objectKey) {
         if (doesExist(objectKey))
             throw new ObjectAlreadyExistsException(objectKey);
 
-        s3Client.putObject(builder -> builder.bucket(bucketName).key(objectKey).build(), path);
+        s3Client.putObject(builder -> builder.bucket(bucketName).key(objectKey).build(), sourcePath);
     }
 
     /**
@@ -109,25 +108,27 @@ public class DataObjectImpl implements DataObject {
     /**
      * Deletes an object.
      *
-     * @param key the object key.
+     * @param key         the object key.
+     * @param isRecursive if true, the object will be deleted recursively.
      */
-    public void deleteObject(String key) {
-        deleteObject(key, false);
+    @Override
+    public void deleteObject(String key, boolean isRecursive) {
+        if (isRecursive) {
+            var objects = s3Client.listObjects(builder -> builder.bucket(bucketName).prefix(key));
+            if (!objects.hasContents()) throw new ObjectNotFoundException(key);
+            objects.contents().forEach(s3Object -> s3Client.deleteObject(builder -> builder.bucket(bucketName).key(s3Object.key())));
+        } else {
+            if (!doesExist(key)) throw new ObjectNotFoundException(key);
+            s3Client.deleteObject(builder -> builder.bucket(bucketName).key(key));
+        }
     }
 
     /**
      * Deletes an object.
      *
-     * @param key         the object key.
-     * @param isRecursive if true, the object will be deleted recursively.
+     * @param key the object key.
      */
-    public void deleteObject(String key, boolean isRecursive) {
-        if (isRecursive)
-            s3Client.listObjects(builder -> builder.bucket(bucketName).prefix(key))
-                    .contents()
-                    .forEach(s3Object -> s3Client.deleteObject(builder -> builder.bucket(bucketName).key(s3Object.key())));
-        else {
-            s3Client.deleteObject(builder -> builder.bucket(bucketName).key(key));
-        }
+    public void deleteObject(String key) {
+        deleteObject(key, false);
     }
 }
