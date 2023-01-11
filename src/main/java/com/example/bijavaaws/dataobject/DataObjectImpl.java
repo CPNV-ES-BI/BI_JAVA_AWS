@@ -60,11 +60,7 @@ public class DataObjectImpl implements DataObject {
      */
     public void createObject(Path sourcePath) {
         String objectKey = sourcePath.getFileName().toString();
-
-        if (doesExist(objectKey))
-            throw new ObjectAlreadyExistsException(objectKey);
-
-        s3Client.putObject(builder -> builder.bucket(bucketName).key(objectKey).build(), sourcePath);
+        createObject(sourcePath, objectKey);
     }
 
     /**
@@ -72,10 +68,14 @@ public class DataObjectImpl implements DataObject {
      *
      * @param sourcePath the path of the object to be uploaded.
      * @param objectKey  the path to the destination file.
+     * @throws ObjectAlreadyExistsException if the object already exists.
      */
     @Override
     public void createObject(Path sourcePath, String objectKey) {
-        throw new UnsupportedOperationException("Not implemented yet.");
+        if (doesExist(objectKey))
+            throw new ObjectAlreadyExistsException(objectKey);
+
+        s3Client.putObject(builder -> builder.bucket(bucketName).key(objectKey).build(), sourcePath);
     }
 
     /**
@@ -124,11 +124,12 @@ public class DataObjectImpl implements DataObject {
      */
     @Override
     public void deleteObject(String key, boolean isRecursive) {
-        if (isRecursive)
-            s3Client.listObjects(builder -> builder.bucket(bucketName).prefix(key))
-                    .contents()
-                    .forEach(s3Object -> s3Client.deleteObject(builder -> builder.bucket(bucketName).key(s3Object.key())));
-        else {
+        if (isRecursive) {
+            var objects = s3Client.listObjects(builder -> builder.bucket(bucketName).prefix(key));
+            if (!objects.hasContents()) throw new ObjectNotFoundException(key);
+            objects.contents().forEach(s3Object -> s3Client.deleteObject(builder -> builder.bucket(bucketName).key(s3Object.key())));
+        } else {
+            if (!doesExist(key)) throw new ObjectNotFoundException(key);
             s3Client.deleteObject(builder -> builder.bucket(bucketName).key(key));
         }
     }
