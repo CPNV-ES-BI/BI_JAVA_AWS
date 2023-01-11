@@ -42,6 +42,13 @@ jobs:
       - name: Build with Maven
         run: mvn -B package --file pom.xml
 
+      - name: Set environment variables
+        run: | 
+          echo "aws.region=${{ secrets.AWS_REGION }}" >> $GITHUB_ENV \
+          echo "aws.accessKeyId=${{ secrets.AWS_ACCESSKEYID }}" >> $GITHUB_ENV \
+          echo "aws.secretAccessKey=${{ secrets.AWS_SECRETACCESSKEY }}" >> $GITHUB_ENV \
+          echo "aws.AWS_BUCKETNAME=${{ secrets.AWS_BUCKETNAME }}" >> $GITHUB_ENV \
+
       - name: Run tests
         env:
           aws.accessKeyId: ${{ secrets.AWS_ACCESSKEYID }}
