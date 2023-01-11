@@ -27,10 +27,10 @@ jobs:
 
       - name: Set environment variables
         run: |
-          echo "aws.region=${{ secrets.AWS_REGIONs }}" >> $PROPERTY_FILE \
-          echo "aws.accessKeyId=${{ secrets.AWS_ACCESSKEYID }}" >> $PROPERTY_FILE \
-          echo "aws.secretAccessKey=${{ secrets.AWS_SECRETACCESSKEY }}" >> $PROPERTY_FILE \
-          echo "aws.AWS_BUCKETNAME=${{ secrets.AWS_BUCKETNAME }}" >> $PROPERTY_FILE \
+          echo "aws.region=${{ secrets.AWS_REGION }}" >> $PROPERTY_FILE \
+          echo "aws.accessKeyId=${{ secrets.AWS_ACCESS_KEY_ID }}" >> $PROPERTY_FILE \
+          echo "aws.secretAccessKey=${{ secrets.AWS_SECRET_ACCESS_KEY }}" >> $PROPERTY_FILE \
+          echo "aws.AWS_BUCKETNAME=${{ secrets.AWS_BUCKET_NAME }}" >> $PROPERTY_FILE \
 
       - name: Build and test
         run: mvn clean test
