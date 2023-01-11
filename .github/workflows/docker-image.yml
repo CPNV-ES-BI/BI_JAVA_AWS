@@ -21,6 +21,14 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v3
 
+      - name: cat env
+        run: |
+          echo $COMPOSE_FILE
+          echo $aws.accessKeyId
+          echo $aws.region
+          echo $aws.secretAccessKey
+          echo $aws.bucketName
+
       - name: Build docker images
         run: docker-compose build
 
