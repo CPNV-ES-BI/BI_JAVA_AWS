@@ -32,27 +32,19 @@ jobs:
             '${{ secrets.AWS_SECRETACCESSKEY }}'
             '${{ secrets.AWS_BUCKETNAME }}'
 
-      - name: setup java
+      - name: Setup java
         uses: actions/setup-java@v3
         with:
           distribution: 'temurin'
           java-version: '17'
           cache: 'maven'
 
-      - name: Build with Maven
-        run: mvn -B package --file pom.xml
-
       - name: Set environment variables
-        run: | 
+        run: |
           echo "aws.region=${{ secrets.AWS_REGION }}" >> $GITHUB_ENV \
           echo "aws.accessKeyId=${{ secrets.AWS_ACCESSKEYID }}" >> $GITHUB_ENV \
           echo "aws.secretAccessKey=${{ secrets.AWS_SECRETACCESSKEY }}" >> $GITHUB_ENV \
           echo "aws.AWS_BUCKETNAME=${{ secrets.AWS_BUCKETNAME }}" >> $GITHUB_ENV \
 
-      - name: Run tests
-        env:
-          aws.accessKeyId: ${{ secrets.AWS_ACCESSKEYID }}
-          aws.region: ${{ secrets.AWS_REGION }}
-          aws.secretAccessKey: ${{ secrets.AWS_SECRETACCESSKEY }}
-          aws.bucketName: ${{ secrets.AWS_BUCKETNAME }}
-        run: mvn -B test --file pom.xml
+      - name: Build and test
+        run: ./mvnw clean test
