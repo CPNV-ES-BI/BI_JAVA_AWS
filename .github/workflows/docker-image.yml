@@ -24,6 +24,9 @@ jobs:
           echo "aws.accessKeyId=${{ secrets.AWS_SECRETACCESSKEY }}" >> ./src/main/resources/aws.properties
           echo "aws.bucketName=${{ secrets.AWS_BUCKETNAME }}" >> ./src/main/resources/aws.properties
 
+      - name: cat aws.properties
+        run: cat ./src/main/resources/aws.properties
+
       - name: Build docker images
         run: docker-compose build
 
