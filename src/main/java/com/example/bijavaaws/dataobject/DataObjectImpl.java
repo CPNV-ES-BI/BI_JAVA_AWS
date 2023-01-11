@@ -9,10 +9,8 @@ import org.springframework.stereotype.Component;
 
 import java.net.URL;
 import java.nio.file.Path;
-import java.util.List;
 
 import software.amazon.awssdk.services.s3.S3Client;
-import software.amazon.awssdk.services.s3.model.Bucket;
 import software.amazon.awssdk.services.s3.model.NoSuchKeyException;
 import software.amazon.awssdk.services.s3.presigner.S3Presigner;
 import software.amazon.awssdk.services.s3.presigner.model.PresignedGetObjectRequest;
@@ -26,15 +24,6 @@ public class DataObjectImpl implements DataObject {
 
     @Value("${aws.bucketName}")
     private String bucketName;
-
-    /**
-     * List all buckets.
-     *
-     * @return List of buckets.
-     */
-    public List<Bucket> listBuckets() {
-        return s3Client.listBuckets().buckets();
-    }
 
     /**
      * Checks if the object exists.
