@@ -19,13 +19,16 @@ jobs:
 
       - name: Create aws.properties file from secrets
         run: |
-          echo "aws.region=${{ secrets.AWS_REGION }}" >> ./src/main/resources/aws.properties
-          echo "aws.secretAccessKey=${{ secrets.AWS_ACCESSKEYID }}" >> ./src/main/resources/aws.properties
-          echo "aws.accessKeyId=${{ secrets.AWS_SECRETACCESSKEY }}" >> ./src/main/resources/aws.properties
-          echo "aws.bucketName=${{ secrets.AWS_BUCKETNAME }}" >> ./src/main/resources/aws.properties
+          echo "aws.region="${{ secrets.AWS_REGION }} >> ./src/main/resources/aws.properties
+          echo "aws.secretAccessKey="${{ secrets.AWS_ACCESSKEYID }} >> ./src/main/resources/aws.properties
+          echo "aws.accessKeyId="${{ secrets.AWS_SECRETACCESSKEY }} >> ./src/main/resources/aws.properties
+          echo "aws.bucketName="${{ secrets.AWS_BUCKETNAME }} >> ./src/main/resources/aws.properties
 
       - name: cat aws.properties
         run: cat ./src/main/resources/aws.properties
+
+      - name: echo secrets
+        run: echo ${{ secrets.AWS_REGION }}
 
       - name: Build docker images
         run: docker-compose build
