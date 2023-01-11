@@ -21,9 +21,12 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v3
 
-      - name: cat env
+      - name: Create aws.properties file from secrets
         run: |
-          echo ${{ secrets.AWS_BUCKETNAME }}
+          echo "aws.accessKeyId=${aws.accessKeyId}" >> ./src/main/resources/aws.properties
+          echo "aws.region=${aws.region}" >> ./src/main/resources/aws.properties
+          echo "aws.secretAccessKey=${aws.secretAccessKey}" >> ./src/main/resources/aws.properties
+          echo "aws.bucketName=${aws.bucketName}" >> ./src/main/resources/aws.properties
 
       - name: Build docker images
         run: docker-compose build
