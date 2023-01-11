@@ -12,25 +12,11 @@ jobs:
     runs-on: ubuntu-latest
     env:
       COMPOSE_FILE: ./docker-compose.yml
+      PROPERTY_FILE: ./src/main/resources/aws.properties
 
     steps:
       - name: Checkout code
         uses: actions/checkout@v3
-
-      - name: Create aws.properties file
-        uses: christian-draeger/write-properties@1.1.0
-        with:
-          path: './src/main/resources/aws.properties'
-          property: |
-            'aws.region'
-            'aws.accessKeyId'
-            'aws.secretAccessKey'
-            'aws.bucketName'
-          value: |
-            '${{ secrets.AWS_REGION }}'
-            '${{ secrets.AWS_ACCESSKEYID }}'
-            '${{ secrets.AWS_SECRETACCESSKEY }}'
-            '${{ secrets.AWS_BUCKETNAME }}'
 
       - name: Setup java
         uses: actions/setup-java@v3
@@ -41,10 +27,10 @@ jobs:
 
       - name: Set environment variables
         run: |
-          echo "aws.region=${{ secrets.AWS_REGION }}" >> $GITHUB_ENV \
-          echo "aws.accessKeyId=${{ secrets.AWS_ACCESSKEYID }}" >> $GITHUB_ENV \
-          echo "aws.secretAccessKey=${{ secrets.AWS_SECRETACCESSKEY }}" >> $GITHUB_ENV \
-          echo "aws.AWS_BUCKETNAME=${{ secrets.AWS_BUCKETNAME }}" >> $GITHUB_ENV \
+          echo "aws.region=${{ secrets.AWS_REGION }}" >> $PROPERTY_FILE \
+          echo "aws.accessKeyId=${{ secrets.AWS_ACCESSKEYID }}" >> $PROPERTY_FILE \
+          echo "aws.secretAccessKey=${{ secrets.AWS_SECRETACCESSKEY }}" >> $PROPERTY_FILE \
+          echo "aws.AWS_BUCKETNAME=${{ secrets.AWS_BUCKETNAME }}" >> $PROPERTY_FILE \
 
       - name: Build and test
         run: ./mvnw clean test
