@@ -23,11 +23,7 @@ jobs:
 
       - name: cat env
         run: |
-          echo $COMPOSE_FILE
-          echo $aws.accessKeyId
-          echo $aws.region
-          echo $aws.secretAccessKey
-          echo $aws.bucketName
+          echo ${{ secrets.AWS_BUCKETNAME }}
 
       - name: Build docker images
         run: docker-compose build
