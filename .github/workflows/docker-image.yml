@@ -12,7 +12,7 @@ jobs:
     runs-on: ubuntu-latest
     env:
       COMPOSE_FILE: ./docker-compose.yml
-      PROPERTY_FILE: ./src/main/resources/aws.properties
+      PROPERTY_FILE: src/main/resources/aws.properties
 
     steps:
       - name: Checkout code
@@ -27,7 +27,7 @@ jobs:
 
       - name: Set environment variables
         run: |
-          echo "aws.region=${{ secrets.AWS_REGION }}" >> $PROPERTY_FILE \
+          echo "aws.region=${{ secrets.AWS_REGIONs }}" >> $PROPERTY_FILE \
           echo "aws.accessKeyId=${{ secrets.AWS_ACCESSKEYID }}" >> $PROPERTY_FILE \
           echo "aws.secretAccessKey=${{ secrets.AWS_SECRETACCESSKEY }}" >> $PROPERTY_FILE \
           echo "aws.AWS_BUCKETNAME=${{ secrets.AWS_BUCKETNAME }}" >> $PROPERTY_FILE \
