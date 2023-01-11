@@ -6,9 +6,11 @@ import java.nio.file.Path;
 public interface DataObject {
     boolean doesExist(String objectKey);
 
-    void createObject(Path path);
+    void createObject(Path sourcePath, String objectKey);
 
     byte[] downloadObject(String key);
 
     URL publishObject(String key);
+
+    void deleteObject(String key, boolean isRecursive);
 }

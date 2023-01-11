@@ -55,17 +55,27 @@ public class DataObjectImpl implements DataObject {
     /**
      * Creates and store an object. The future object key is the file name in the path.
      *
-     * @param path the path to the file to be uploaded.
+     * @param sourcePath the path of the object to be uploaded.
      * @throws ObjectAlreadyExistsException if the object already exists.
      */
-    @Override
-    public void createObject(Path path) {
-        String objectKey = path.getFileName().toString();
+    public void createObject(Path sourcePath) {
+        String objectKey = sourcePath.getFileName().toString();
 
         if (doesExist(objectKey))
             throw new ObjectAlreadyExistsException(objectKey);
 
-        s3Client.putObject(builder -> builder.bucket(bucketName).key(objectKey).build(), path);
+        s3Client.putObject(builder -> builder.bucket(bucketName).key(objectKey).build(), sourcePath);
+    }
+
+    /**
+     * Creates and store an object. The future object key is the file name in the path.
+     *
+     * @param sourcePath the path of the object to be uploaded.
+     * @param objectKey  the path to the destination file.
+     */
+    @Override
+    public void createObject(Path sourcePath, String objectKey) {
+        throw new UnsupportedOperationException("Not implemented yet.");
     }
 
     /**
@@ -109,18 +119,10 @@ public class DataObjectImpl implements DataObject {
     /**
      * Deletes an object.
      *
-     * @param key the object key.
-     */
-    public void deleteObject(String key) {
-        deleteObject(key, false);
-    }
-
-    /**
-     * Deletes an object.
-     *
      * @param key         the object key.
      * @param isRecursive if true, the object will be deleted recursively.
      */
+    @Override
     public void deleteObject(String key, boolean isRecursive) {
         if (isRecursive)
             s3Client.listObjects(builder -> builder.bucket(bucketName).prefix(key))
@@ -129,5 +131,14 @@ public class DataObjectImpl implements DataObject {
         else {
             s3Client.deleteObject(builder -> builder.bucket(bucketName).key(key));
         }
+    }
+
+    /**
+     * Deletes an object.
+     *
+     * @param key the object key.
+     */
+    public void deleteObject(String key) {
+        deleteObject(key, false);
     }
 }
