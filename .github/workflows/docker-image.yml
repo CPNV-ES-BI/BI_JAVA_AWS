@@ -33,4 +33,4 @@ jobs:
           echo "aws.AWS_BUCKETNAME=${{ secrets.AWS_BUCKETNAME }}" >> $PROPERTY_FILE \
 
       - name: Build and test
-        run: ./mvnw clean test
+        run: mvn clean test
