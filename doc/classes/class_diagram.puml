@@ -14,16 +14,15 @@ endlegend
 package BI_JAVA_AWS {
     interface DataObject {
         + doesExist(objectKey: String) : boolean
-        + createObject(path: Path) : void
+        + createObject(path: Path, objectKey: String) : void
         + downloadObject(key: String) : byte[]
         + publishObject(key: String) : URL
+        + deleteObject(objectKey: String, isRecursive: boolean) : void
     }
 
     class DataObjectImpl {
         - s3Client: S3Client
         - bucketName: String
-        + listBuckets(): List<Bucket>
-        + deleteObject(objectKey: String, isRecursive: boolean) : void
     }
 
     class ObjectAlreadyExistsException {
