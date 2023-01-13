@@ -83,8 +83,6 @@ All available endpoints:
 
 | Endpoint         | Description                                                        |
 |------------------|--------------------------------------------------------------------|
-| /                | Hello World                                                        |
-| /buckets         | List all s3 buckets of the region based on the aws properties file |
 | /actuator/health | Health check                                                       |
 
 ## Tests
