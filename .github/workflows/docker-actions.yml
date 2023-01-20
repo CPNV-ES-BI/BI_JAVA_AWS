@@ -1,4 +1,4 @@
-name: Docker Image CI
+name: Github actions CI
 
 on:
   push:
@@ -21,7 +21,14 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v3
 
-      - name: Create aws properties file
+      - name: Setup java
+        uses: actions/setup-java@v3
+        with:
+          distribution: 'temurin'
+          java-version: '17'
+          cache: 'maven'
+
+      - name: Create aws.properties file
         run: |
           touch ${{ env.PROPERTY_FILE }}
             echo aws.accessKeyId=${{ env.AWS_ACCESS_KEY_ID }} >> ${{ env.PROPERTY_FILE }}
@@ -29,8 +36,5 @@ jobs:
             echo aws.region=${{ env.AWS_REGION }} >> ${{ env.PROPERTY_FILE }}
             echo aws.bucketName=${{ env.AWS_BUCKET_NAME }} >> ${{ env.PROPERTY_FILE }}
 
-      - name: Build the Docker image
-        run: docker build . --tag bi_aws_microservice --file docker/Dockerfile
-
-      - name: Run the integration test
-        run: docker run bi_aws_microservice:latest
+      - name: Build and test
+        run: mvn clean test
