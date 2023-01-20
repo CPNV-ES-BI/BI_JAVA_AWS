@@ -1,0 +1,35 @@
+name: Docker Image CI
+
+on:
+  push:
+    branches:
+      - "main"
+
+jobs:
+  test:
+    name: Run test suite
+    runs-on: ubuntu-latest
+    env:
+      PROPERTY_FILE: src/main/resources/aws.properties
+      AWS_REGION: ${{ secrets.AWS_REGION }}
+      AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
+      AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+      AWS_BUCKET_NAME: ${{ secrets.AWS_BUCKET_NAME }}
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+
+      - name: Create aws properties file
+        run: |
+          touch ${{ env.PROPERTY_FILE }}
+            echo aws.accessKeyId=${{ env.AWS_ACCESS_KEY_ID }} >> ${{ env.PROPERTY_FILE }}
+            echo aws.secretAccessKey=${{ env.AWS_SECRET_ACCESS_KEY }} >> ${{ env.PROPERTY_FILE }}
+            echo aws.region=${{ env.AWS_REGION }} >> ${{ env.PROPERTY_FILE }}
+            echo aws.bucketName=${{ env.AWS_BUCKET_NAME }} >> ${{ env.PROPERTY_FILE }}
+
+      - name: Build the Docker image
+        run: docker build . --tag bi_aws_microservice --file docker/Dockerfile
+
+      - name: Run the integration test
+        run: docker run bi_aws_microservice:latest
