@@ -30,7 +30,7 @@ jobs:
             echo aws.bucketName=${{ env.AWS_BUCKET_NAME }} >> ${{ env.PROPERTY_FILE }}
 
       - name: Build the Docker image
-        run: docker build . --tag bi_aws_microservice --file docker/Dockerfile
+        run: docker build . --tag bi_aws_microservice --file docker/Dockerfile --target test
 
       - name: Run the integration test
         run: docker run bi_aws_microservice:latest
