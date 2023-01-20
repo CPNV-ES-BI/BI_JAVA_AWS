@@ -8,9 +8,13 @@ services:
         target: development
     ports:
       - "8080:8080"
+    env_file:
+      - src/main/resources/aws.properties
   test:
     container_name: test
     build:
         context: .
         dockerfile: docker/Dockerfile
         target: test
+    env_file:
+      - src/main/resources/aws.properties

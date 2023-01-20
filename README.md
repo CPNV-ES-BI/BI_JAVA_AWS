@@ -47,12 +47,12 @@ to the repository.
 
 Fill in the `aws.properties` file with the following information:
 
-| Property Name       | Description                              | Example Value                            |
-|---------------------|------------------------------------------|------------------------------------------|
-| aws.region          | AWS region                               | us-east-1                                |
-| aws.accessKeyId     | S3 key id                                | AKIAIOSFODNN7EXAMPLE                     |
-| aws.secretAccessKey | S3 secret name                           | wJalrXUtnFEMI/K7MDENG/bPxRfiCYEXAMPLEKEY |
-| aws.bucketName      | S3 bucket name to use inside the service | my-bucket                                |
+| Property Name         | Description                              | Example Value                            |
+|-----------------------|------------------------------------------|------------------------------------------|
+| AWS_REGION            | AWS region                               | us-east-1                                |
+| AWS_ACCESS_KEY_ID     | S3 key id                                | AKIAIOSFODNN7EXAMPLE                     |
+| AWS_SECRET_ACCESS_KEY | S3 secret name                           | wJalrXUtnFEMI/K7MDENG/bPxRfiCYEXAMPLEKEY |
+| AWS_BUCKET_NAME       | S3 bucket name to use inside the service | my-bucket                                |
 
 ## Installation
 
@@ -131,6 +131,11 @@ Run the tests:
 docker compose up test --build
 # or
 make docker-up-test
+```
+Run a specific test:
+
+```bash
+docker-compose run --rm test ./mvnw test -Dtest=TestClassName#methodName
 ```
 
 ## Folder structure

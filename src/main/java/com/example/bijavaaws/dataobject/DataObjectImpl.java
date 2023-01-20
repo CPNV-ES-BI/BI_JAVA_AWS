@@ -22,7 +22,7 @@ public class DataObjectImpl implements DataObject {
     @Autowired
     private S3Client s3Client;
 
-    @Value("${aws.bucketName}")
+    @Value("${AWS_BUCKET_NAME}")
     private String bucketName;
 
     /**

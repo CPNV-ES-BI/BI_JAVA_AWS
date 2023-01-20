@@ -28,13 +28,13 @@ jobs:
           java-version: '17'
           cache: 'maven'
 
-      - name: Create aws.properties file
+      - name: Create aws properties file
         run: |
           touch ${{ env.PROPERTY_FILE }}
-            echo aws.accessKeyId=${{ env.AWS_ACCESS_KEY_ID }} >> ${{ env.PROPERTY_FILE }}
-            echo aws.secretAccessKey=${{ env.AWS_SECRET_ACCESS_KEY }} >> ${{ env.PROPERTY_FILE }}
-            echo aws.region=${{ env.AWS_REGION }} >> ${{ env.PROPERTY_FILE }}
-            echo aws.bucketName=${{ env.AWS_BUCKET_NAME }} >> ${{ env.PROPERTY_FILE }}
+            echo AWS_ACCESS_KEY_ID=${{ env.AWS_ACCESS_KEY_ID }} >> ${{ env.PROPERTY_FILE }}
+            echo AWS_SECRET_ACCESS_KEY=${{ env.AWS_SECRET_ACCESS_KEY }} >> ${{ env.PROPERTY_FILE }}
+            echo AWS_REGION=${{ env.AWS_REGION }} >> ${{ env.PROPERTY_FILE }}
+            echo AWS_BUCKET_NAME=${{ env.AWS_BUCKET_NAME }} >> ${{ env.PROPERTY_FILE }}
 
       - name: Build and test
         run: mvn clean test
