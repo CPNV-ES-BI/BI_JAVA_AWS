@@ -33,4 +33,4 @@ jobs:
         run: docker build . --tag bi_aws_microservice --file docker/Dockerfile --target test
 
       - name: Run the integration test
-        run: docker run bi_aws_microservice:latest
+        run: docker run -e AWS_REGION=${{ env.AWS_REGION }} -e AWS_ACCESS_KEY_ID=${{ env.AWS_ACCESS_KEY_ID }} -e AWS_SECRET_ACCESS_KEY=${{ env.AWS_SECRET_ACCESS_KEY }} -e AWS_BUCKET_NAME=${{ env.AWS_BUCKET_NAME }} bi_aws_microservice:latest
