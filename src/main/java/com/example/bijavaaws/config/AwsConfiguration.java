@@ -14,13 +14,13 @@ import software.amazon.awssdk.regions.providers.AwsRegionProvider;
 @Configuration
 class AwsConfiguration {
 
-    @Value("${aws.region}")
+    @Value("${AWS_REGION}")
     private String region;
 
-    @Value("${aws.accessKeyId}")
+    @Value("${AWS_ACCESS_KEY_ID}")
     private String accessKeyId;
 
-    @Value("${aws.secretAccessKey}")
+    @Value("${AWS_SECRET_ACCESS_KEY}")
     private String secretAccessKey;
 
     @Bean
