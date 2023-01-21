@@ -8,7 +8,7 @@ on:
 
 jobs:
   test:
-    name: Run test suite
+    name: Run test suite and verify code coverage
     runs-on: ubuntu-latest
     env:
       PROPERTY_FILE: src/main/resources/aws.properties
@@ -36,5 +36,5 @@ jobs:
             echo AWS_REGION=${{ env.AWS_REGION }} >> ${{ env.PROPERTY_FILE }}
             echo AWS_BUCKET_NAME=${{ env.AWS_BUCKET_NAME }} >> ${{ env.PROPERTY_FILE }}
 
-      - name: Build and test
-        run: mvn clean test
+      - name: Run the integrations tests
+        run: mvn clean verify

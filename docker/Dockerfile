@@ -9,5 +9,8 @@ COPY ./src ./src
 FROM base as test
 CMD ["./mvnw", "test"]
 
+FROM base as verify
+CMD ["./mvnw", "verify"]
+
 FROM base as development
 CMD ["./mvnw", "spring-boot:run"]
