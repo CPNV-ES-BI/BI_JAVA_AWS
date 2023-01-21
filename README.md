@@ -140,7 +140,7 @@ docker-compose run --rm test ./mvnw test -Dtest=TestClassName#methodName
 
 ## Folder structure
 
-See the [folder structure](doc/FOLDER_STRUCTURE.md) documentation.
+See the [folder structure](doc/FOLDERS_STRUCTURE.md) documentation.
 
 ## Contributing
 

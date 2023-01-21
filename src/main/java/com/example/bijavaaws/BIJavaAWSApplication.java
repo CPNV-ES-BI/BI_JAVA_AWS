@@ -8,9 +8,9 @@ import org.springframework.web.bind.annotation.RestController;
 @SpringBootApplication
 @RestController
 @PropertySource("classpath:aws.properties")
-public class BIJavaAWS {
+public class BIJavaAWSApplication {
 
     public static void main(String[] args) {
-        SpringApplication.run(BIJavaAWS.class, args);
+        SpringApplication.run(BIJavaAWSApplication.class, args);
     }
 }

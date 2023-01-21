@@ -5,7 +5,7 @@ import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
-import com.example.bijavaaws.BIJavaAWS;
+import com.example.bijavaaws.BIJavaAWSApplication;
 import com.example.bijavaaws.exceptions.ObjectAlreadyExistsException;
 import com.example.bijavaaws.exceptions.ObjectNotFoundException;
 
@@ -27,7 +27,7 @@ import java.text.MessageFormat;
 import java.util.concurrent.Callable;
 
 @ExtendWith(SpringExtension.class)
-@ContextConfiguration(classes = BIJavaAWS.class)
+@ContextConfiguration(classes = BIJavaAWSApplication.class)
 class DataObjectImplTest {
 
     @Autowired
