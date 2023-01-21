@@ -115,7 +115,6 @@ public class DataObjectImpl implements DataObject {
     public void deleteObject(String key, boolean isRecursive) {
         if (isRecursive) {
             var objects = s3Client.listObjects(builder -> builder.bucket(bucketName).prefix(key));
-            if (!objects.hasContents()) throw new ObjectNotFoundException(key);
             objects.contents().forEach(s3Object -> s3Client.deleteObject(builder -> builder.bucket(bucketName).key(s3Object.key())));
         } else {
             if (!doesExist(key)) throw new ObjectNotFoundException(key);
