@@ -81,11 +81,14 @@ The base url is `http://localhost:8080`.
 
 All available endpoints:
 
-| Endpoint         | Description                                                        |
-|------------------|--------------------------------------------------------------------|
-| /actuator/health | Health check                                                       |
+| Endpoint         | Description  |
+|------------------|--------------|
+| /actuator/health | Health check |
 
 ## Tests
+
+_The coverage report is generated in the maven `test` phase, so everytime you run test(s), the report will be
+generated in the `target/site/jacoco` folder and printed in the console._
 
 Run the tests:
 
@@ -99,7 +102,14 @@ Run a specific test:
 mvn clean test -Dtest=TestClassName#methodName
 ```
 
-[//]: # (TODO : add test coverage section)
+Run the tests and check the code coverage:
+
+```bash
+mvn clean verify
+```
+
+With JaCoCo, the code coverage check is done in the `verify` phase. The threshold is set to 100% of instructions in the
+`DataObjectImpl` class. If the coverage is lower than the threshold, this will fail.
 
 ## Docker
 
@@ -132,6 +142,7 @@ docker compose up test --build
 # or
 make docker-up-test
 ```
+
 Run a specific test:
 
 ```bash

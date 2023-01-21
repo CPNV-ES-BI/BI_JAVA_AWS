@@ -15,15 +15,19 @@ reportFile.withReader('UTF-8') { reader ->
         def branchRatio = line.td[4]
 
         def instructionMessage = "${instructionRatio} of instructions covered"
-        logInfo "JaCoCo Printer - ${packageName} : " + instructionMessage + ", ${branchRatio} of branches covered."
+        def branchMessage = "${branchRatio} of branches covered"
+
+        logInfo "JaCoCo Printer - ${packageName} : ${instructionMessage}, ${branchMessage}."
     }
 
     def totalRow = html.body.table.tfoot.tr
     def totalInstructionRatio = totalRow.td[2]
     def totalBranchRatio = totalRow.td[4]
 
-    logInfo "JaCoCo Printer - ${totalInstructionRatio} of total instructions covered"
-    logInfo "JaCoCo Printer - ${totalBranchRatio} of total branches covered"
+    def totalInstructionMessage = "${totalInstructionRatio} of instructions covered"
+    def totalBranchMessage = "${totalBranchRatio} of branches covered"
+
+    logInfo "JaCoCo Printer - Total : ${totalInstructionMessage}, ${totalBranchMessage}."
 }
 
 XmlSlurper getParser() {
@@ -34,7 +38,7 @@ XmlSlurper getParser() {
 }
 
 void logInfo(String message) {
-    def style = "${(char) 27}[34m"
-    def infoPrefix = "[${style}INFO${(char) 27}[0m]"
+    def style = "${(27 as char)}[34m"
+    def infoPrefix = "[${style}INFO${(27 as char)}[0m]"
     println "${infoPrefix} ${message}"
 }

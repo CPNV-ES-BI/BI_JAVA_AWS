@@ -121,15 +121,16 @@
                 <version>2.1.1</version>
                 <executions>
                     <execution>
+                        <id>print-jacoco-report</id>
                         <phase>test</phase>
                         <goals>
                             <goal>execute</goal>
                         </goals>
-                        <configuration>
-                            <source>JacocoPrinter.groovy</source>
-                        </configuration>
                     </execution>
                 </executions>
+                <configuration>
+                    <source>JacocoPrinter.groovy</source>
+                </configuration>
             </plugin>
         </plugins>
     </build>

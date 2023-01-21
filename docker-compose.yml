@@ -18,3 +18,11 @@ services:
         target: test
     env_file:
       - src/main/resources/aws.properties
+  verify:
+    container_name: verify
+    build:
+        context: .
+        dockerfile: docker/Dockerfile
+        target: verify
+    env_file:
+      - src/main/resources/aws.properties

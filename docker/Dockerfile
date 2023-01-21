@@ -3,13 +3,16 @@ FROM openjdk:17-jdk-alpine as base
 WORKDIR /app
 COPY ./.mvn .mvn
 COPY ./mvnw pom.xml ./
-RUN chmod +x ./mvnw && ./mvnw dependency:resolve
+RUN chmod +x ./mvnw
+RUN ./mvnw dependency:go-offline -B
 COPY ./src ./src
+RUN ./mvnw compile
 
 FROM base as test
+COPY ./JacocoPrinter.groovy ./
 CMD ["./mvnw", "test"]
 
-FROM base as verify
+FROM test as verify
 CMD ["./mvnw", "verify"]
 
 FROM base as development
