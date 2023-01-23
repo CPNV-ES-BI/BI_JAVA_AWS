@@ -14,10 +14,10 @@ endlegend
 package BI_JAVA_AWS {
     interface DataObject {
         + doesExist(objectKey: String) : boolean
-        + createObject(path: Path, objectKey: String) : void
+        + createObject(path: Path, objectKey: String = null) : void
         + downloadObject(key: String) : byte[]
         + publishObject(key: String) : URL
-        + deleteObject(objectKey: String, isRecursive: boolean) : void
+        + deleteObject(objectKey: String, isRecursive: boolean = false) : void
     }
 
     class DataObjectImpl {
