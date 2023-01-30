@@ -1,13 +1,13 @@
-package com.example.bijavaaws.dataobject;
+package com.cpnv.bijavaaws.dataobject;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
-import com.example.bijavaaws.BIJavaAWSApplication;
-import com.example.bijavaaws.exceptions.ObjectAlreadyExistsException;
-import com.example.bijavaaws.exceptions.ObjectNotFoundException;
+import com.cpnv.bijavaaws.BIJavaAWSApplication;
+import com.cpnv.bijavaaws.exceptions.ObjectAlreadyExistsException;
+import com.cpnv.bijavaaws.exceptions.ObjectNotFoundException;
 
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;

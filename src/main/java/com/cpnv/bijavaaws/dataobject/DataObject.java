@@ -1,4 +1,4 @@
-package com.example.bijavaaws.dataobject;
+package com.cpnv.bijavaaws.dataobject;
 
 import java.net.URL;
 import java.nio.file.Path;

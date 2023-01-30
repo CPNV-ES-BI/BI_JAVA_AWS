@@ -1,4 +1,4 @@
-package com.example.bijavaaws.exceptions;
+package com.cpnv.bijavaaws.exceptions;
 
 public class ObjectAlreadyExistsException extends RuntimeException {
     public ObjectAlreadyExistsException(String objectKey) {

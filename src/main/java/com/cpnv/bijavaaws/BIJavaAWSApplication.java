@@ -1,4 +1,4 @@
-package com.example.bijavaaws;
+package com.cpnv.bijavaaws;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;

@@ -1,7 +1,7 @@
-package com.example.bijavaaws.dataobject;
+package com.cpnv.bijavaaws.dataobject;
 
-import com.example.bijavaaws.exceptions.ObjectAlreadyExistsException;
-import com.example.bijavaaws.exceptions.ObjectNotFoundException;
+import com.cpnv.bijavaaws.exceptions.ObjectAlreadyExistsException;
+import com.cpnv.bijavaaws.exceptions.ObjectNotFoundException;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
