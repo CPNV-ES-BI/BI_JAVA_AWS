@@ -1,19 +1,24 @@
-FROM openjdk:17-jdk-alpine as base
+FROM openjdk:17-jdk-alpine as build
 
 WORKDIR /app
+
 COPY ./.mvn .mvn
 COPY ./mvnw pom.xml ./
+COPY ./src/main ./src/main
+
 RUN chmod +x ./mvnw
 RUN ./mvnw dependency:go-offline -B
-COPY ./src ./src
-RUN ./mvnw compile
+RUN ./mvnw clean package -DskipTests
 
-FROM base as test
-COPY ./JacocoPrinter.groovy ./
+
+FROM build as development
+CMD ["./mvnw", "spring-boot:run"]
+
+
+FROM build as test
+COPY ./src/test ./src/test
 CMD ["./mvnw", "test"]
+
 
 FROM test as verify
 CMD ["./mvnw", "verify"]
-
-FROM base as development
-CMD ["./mvnw", "spring-boot:run"]
