@@ -3,6 +3,7 @@ package com.cpnv.bijavaaws.service;
 import com.cpnv.bijavaaws.BIJavaAWSApplication;
 import com.cpnv.bijavaaws.exceptions.ObjectAlreadyExistsException;
 import com.cpnv.bijavaaws.exceptions.ObjectNotFoundException;
+import com.cpnv.bijavaaws.config.ConfigMock;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -24,7 +25,7 @@ import java.util.concurrent.Callable;
 import static org.junit.jupiter.api.Assertions.*;
 
 @ExtendWith(SpringExtension.class)
-@ContextConfiguration(classes = BIJavaAWSApplication.class)
+@ContextConfiguration(classes = {BIJavaAWSApplication.class, ConfigMock.class})
 class DataObjectImplTest {
 
     @Autowired
