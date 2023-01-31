@@ -1,12 +1,13 @@
 package com.cpnv.bijavaaws.dataobject;
 
+import org.springframework.web.multipart.MultipartFile;
+
 import java.net.URL;
-import java.nio.file.Path;
 
 public interface DataObject {
     boolean doesExist(String objectKey);
 
-    void createObject(Path sourcePath, String objectKey);
+    void createObject(MultipartFile file, String objectKey);
 
     byte[] downloadObject(String key);
 

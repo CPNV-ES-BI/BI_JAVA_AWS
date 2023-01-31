@@ -1,30 +1,27 @@
 package com.cpnv.bijavaaws.dataobject;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertFalse;
-import static org.junit.jupiter.api.Assertions.assertThrows;
-import static org.junit.jupiter.api.Assertions.assertTrue;
-
 import com.cpnv.bijavaaws.BIJavaAWSApplication;
 import com.cpnv.bijavaaws.exceptions.ObjectAlreadyExistsException;
 import com.cpnv.bijavaaws.exceptions.ObjectNotFoundException;
-
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.mock.web.MockMultipartFile;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 import org.springframework.util.ResourceUtils;
+import org.springframework.web.multipart.MultipartFile;
 
-import java.io.FileNotFoundException;
+import java.io.File;
 import java.io.IOException;
 import java.net.URL;
 import java.nio.file.Files;
-import java.nio.file.Path;
 import java.text.MessageFormat;
 import java.util.concurrent.Callable;
+
+import static org.junit.jupiter.api.Assertions.*;
 
 @ExtendWith(SpringExtension.class)
 @ContextConfiguration(classes = BIJavaAWSApplication.class)
@@ -33,18 +30,22 @@ class DataObjectImplTest {
     @Autowired
     private DataObjectImpl dataObject;
 
-    private static Path testFilePath;
+    private static MultipartFile testFilePath;
 
     private String objectKey;
 
     @BeforeAll
-    static void beforeAll() throws FileNotFoundException {
-        testFilePath = ResourceUtils.getFile("classpath:data/test-file.txt").toPath();
+    static void beforeAll() throws IOException {
+        File file = ResourceUtils.getFile("classpath:data/test-file.txt");
+        String originalFileName = file.getName();
+        String contentType = "application/octet-stream";
+        byte[] content = Files.readAllBytes(file.toPath());
+        testFilePath = new MockMultipartFile(originalFileName, originalFileName, contentType, content);
     }
 
     @BeforeEach
     void beforeEach() {
-        objectKey = testFilePath.getFileName().toString();
+        objectKey = testFilePath.getOriginalFilename();
         deleteObjectIfExists(objectKey);
 
         dataObject.createObject(testFilePath);
@@ -108,7 +109,7 @@ class DataObjectImplTest {
     @Test
     void downloadObject_NominalCase_Downloaded() throws IOException {
         // Given
-        String expectedContent = Files.readString(testFilePath);
+        String expectedContent = new String(testFilePath.getBytes());
 
         // When
         byte[] result = dataObject.downloadObject(objectKey);
@@ -135,7 +136,7 @@ class DataObjectImplTest {
     @Test
     void publishObject_NominalCase_ObjectPublished() throws IOException {
         // Given
-        String expectedContent = Files.readString(testFilePath);
+        String expectedContent = new String(testFilePath.getBytes());
 
         // When
         URL objectUrl = dataObject.publishObject(objectKey);
