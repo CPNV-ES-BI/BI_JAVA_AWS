@@ -1,23 +1,34 @@
-FROM openjdk:17-jdk-alpine as build
+ARG JAVA_VERSION=17
+ARG WORKDIR=/app
+ARG MVN=./mvnw
 
-WORKDIR /app
+
+FROM openjdk:${JAVA_VERSION}-jdk-alpine as build
+
+ARG WORKDIR
+ARG MVN
+
+WORKDIR ${WORKDIR}
 
 COPY ./.mvn .mvn
-COPY ./mvnw ./
-RUN chmod +x ./mvnw
+COPY ${MVN} ./
+RUN chmod +x ${MVN}
 
 COPY pom.xml ./
-RUN ./mvnw dependency:go-offline
+RUN ${MVN} dependency:go-offline
 
 COPY ./src/main ./src/main
-RUN ./mvnw clean package -DskipTests
+RUN ${MVN} clean package -DskipTests
 
 
-FROM eclipse-temurin:17-jre-alpine AS production
+FROM eclipse-temurin:${JAVA_VERSION}-jre-alpine AS production
 
-WORKDIR /app
+ARG WORKDIR
+ENV MICROSERVICE_NAME=bi-java-aws
 
-COPY --from=build /app/target/bi-java-aws*.jar app.jar
+WORKDIR ${WORKDIR}
+
+COPY --from=build ${WORKDIR}/target/${MICROSERVICE_NAME}*.jar app.jar
 
 
 FROM production AS development
@@ -26,12 +37,15 @@ CMD ["java", "-Xdebug", "-Xrunjdwp:transport=dt_socket,server=y,suspend=n,addres
 
 
 FROM build as test
+ARG MVN
+ENV MVN=${MVN}
 
 COPY ./src/test ./src/test
-
-CMD ["./mvnw", "test"]
+CMD ${MVN} test
 
 
 FROM test as verify
+ARG MVN
+ENV MVN=${MVN}
 
-CMD ["./mvnw", "verify"]
+CMD ${MVN} verify
