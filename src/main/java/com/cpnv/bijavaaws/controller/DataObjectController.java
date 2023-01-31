@@ -1,4 +1,4 @@
-package com.cpnv.bijavaaws.api;
+package com.cpnv.bijavaaws.controller;
 
 import com.cpnv.bijavaaws.dataobject.DataObject;
 import io.swagger.annotations.Api;
