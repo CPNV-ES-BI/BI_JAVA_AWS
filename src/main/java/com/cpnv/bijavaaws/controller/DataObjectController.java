@@ -1,6 +1,6 @@
 package com.cpnv.bijavaaws.controller;
 
-import com.cpnv.bijavaaws.dataobject.DataObject;
+import com.cpnv.bijavaaws.service.DataObject;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;

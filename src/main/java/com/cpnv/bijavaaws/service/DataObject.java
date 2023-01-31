@@ -1,4 +1,4 @@
-package com.cpnv.bijavaaws.dataobject;
+package com.cpnv.bijavaaws.service;
 
 import org.springframework.web.multipart.MultipartFile;
 

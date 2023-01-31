@@ -1,4 +1,4 @@
-package com.cpnv.bijavaaws.dataobject;
+package com.cpnv.bijavaaws.service;
 
 import com.cpnv.bijavaaws.exceptions.ObjectAlreadyExistsException;
 import com.cpnv.bijavaaws.exceptions.ObjectNotFoundException;
