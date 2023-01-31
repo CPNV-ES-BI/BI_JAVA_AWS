@@ -18,6 +18,7 @@
 |   +---classes
 |   \---sequences
 +---Docker
+|   |   .dockerignore
 |   |   Dockerfile
 +---src
     +---main
@@ -38,7 +39,8 @@
         |           \---bijavaaws
         |               \---dataobject
         \---resources
-                test-file.txt
+            \---data
+            \---groovy
 ```
 
 Here is an explanation of the project folders structure:
@@ -71,6 +73,8 @@ Here is an explanation of the project folders structure:
     - `sequences`: Sequence diagram images and the PlantUML source files used to generate them.
 - `docker`: Files related to Docker, such as a `Dockerfile` used to build a Docker image for the
   project.
+    - `.dockerignore`: Lists patterns for files and directories that Docker should ignore when building
+      an image.
     - `Dockerfile`: Instructions for building a Docker image.
 - `src`: The source code. It is divided into `main` and `test` directories for
   production code and test code, respectively.
@@ -86,4 +90,5 @@ Here is an explanation of the project folders structure:
         - `java/com/example/bijavaaws`: Package containing the test code.
             - `dataobject`: Tests for the classes related to data objects.
         - `resources`: Non-code resources for the test code, such as test data files.
-            - `test-file.txt`: A test data file.
+            - `data`: Test data files.
+            - `groovy`: Groovy scripts used by the tests.
