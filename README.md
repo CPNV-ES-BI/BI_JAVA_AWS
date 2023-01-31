@@ -144,6 +144,10 @@ docker compose up development --build
 make docker-up
 ```
 
+A debug port `5005` is exposed using
+the [JDWP](https://docs.oracle.com/javase/8/docs/technotes/guides/jpda/jdwp-spec.html) (Java Debug Wire Protocol)
+protocol in the `development` image. You can connect to it using your IDE.
+
 Run the tests:
 
 ```bash
