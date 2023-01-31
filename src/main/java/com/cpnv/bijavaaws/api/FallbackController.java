@@ -1,5 +1,7 @@
-package com.cpnv.bijavaaws.exceptions;
+package com.cpnv.bijavaaws.api;
 
+import com.cpnv.bijavaaws.exceptions.ObjectAlreadyExistsException;
+import com.cpnv.bijavaaws.exceptions.ObjectNotFoundException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.ControllerAdvice;
@@ -7,7 +9,7 @@ import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExceptionHandler;
 
 @ControllerAdvice
-public class ControllerAdvisor extends ResponseEntityExceptionHandler {
+public class FallbackController extends ResponseEntityExceptionHandler {
     @ExceptionHandler(ObjectNotFoundException.class)
     public ResponseEntity<String> handleException(ObjectNotFoundException ex) {
         return ResponseEntity.status(HttpStatus.NOT_FOUND).body(ex.getMessage());
