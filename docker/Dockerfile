@@ -15,7 +15,8 @@ COPY --from=build /app/target/bi-java-aws-0.0.1-SNAPSHOT.jar app.jar
 
 
 FROM production AS development
-CMD ["java", "-jar", "app.jar"]
+
+CMD ["java", "-Xdebug", "-Xrunjdwp:transport=dt_socket,server=y,suspend=n,address=*:5005", "-jar", "app.jar"]
 
 
 FROM build as test
