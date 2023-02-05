@@ -81,9 +81,16 @@ The base url is `http://localhost:8080`.
 
 All available endpoints:
 
-| Endpoint         | Description  |
-|------------------|--------------|
-| /actuator/health | Health check |
+| Endpoint                   | Description                   | Method |
+|----------------------------|-------------------------------|--------|
+| /swagger-ui/               | Swagger UI                    | GET    |
+| /v3/api-docs               | Swagger JSON                  | GET    |
+| /actuator/health           | Health check                  | GET    |
+| /api/objects               | Create an object              | POST   |
+| /api/objects/{key}         | Download an object by its key | GET    |
+| /api/objects/{key}         | Delete an object by its key   | DELETE |
+| /api/objects/{key}/publish | Publish an object by its key  | PATCH  |
+
 
 ## Tests
 
