@@ -77,14 +77,11 @@ public class DataObjectController {
 
     @ApiOperation(value = "Publish an object from the S3 bucket")
     @ApiResponses(value = {
-            @ApiResponse(code = 204, message = "Object published successfully", response = URL.class, responseHeaders = {@ResponseHeader(name = "Location", description = "URL of the published object", response = URL.class)}),
+            @ApiResponse(code = 200, message = "Object published successfully", response = URL.class, responseHeaders = {@ResponseHeader(name = "Location", description = "URL of the published object", response = URL.class)}),
             @ApiResponse(code = 404, message = "Object not found", response = ObjectNotFoundException.class)
     })
     @PatchMapping("/objects/{objectKey}/publish")
-    public ResponseEntity<URL> publishObject(
-            @ApiParam(value = "Value of the object key")
-            @PathVariable String objectKey
-    ) {
-        return ResponseEntity.status(HttpStatus.NO_CONTENT).body(dataObject.publishObject(objectKey));
+    public ResponseEntity<URL> publishObject(@ApiParam(value = "Value of the object key") @PathVariable String objectKey) {
+        return ResponseEntity.status(HttpStatus.OK).body(dataObject.publishObject(objectKey));
     }
 }
