@@ -1,2 +1,9 @@
+### Folders ###
+.github
+.git
+doc
+lib
 target
+
+### Files ###
 src/main/resources/aws.secrets.properties
