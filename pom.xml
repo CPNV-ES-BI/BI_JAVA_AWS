@@ -14,6 +14,7 @@
     <name>bi-java-aws</name>
     <description>Spring boot microservice using docker</description>
     <properties>
+        <spring-boot.version>2.7.5</spring-boot.version>
         <java.version>17</java.version>
         <spring-cloud.version>2021.0.5</spring-cloud.version>
         <spring-cloud-aws.version>3.0.0-M2</spring-cloud-aws.version>
@@ -180,6 +181,22 @@
                 <groupId>de.qaware.maven</groupId>
                 <artifactId>go-offline-maven-plugin</artifactId>
                 <version>1.2.8</version>
+                <configuration>
+                    <dynamicDependencies>
+                        <DynamicDependency>
+                            <groupId>org.springframework.boot</groupId>
+                            <artifactId>spring-boot-starter-parent</artifactId>
+                            <version>${spring-boot.version}</version>
+                            <repositoryType>MAIN</repositoryType>
+                        </DynamicDependency>
+                        <DynamicDependency>
+                            <groupId>org.apache.maven.surefire</groupId>
+                            <artifactId>surefire-junit-platform</artifactId>
+                            <version>2.22.2</version>
+                            <repositoryType>PLUGIN</repositoryType>
+                        </DynamicDependency>
+                    </dynamicDependencies>
+                </configuration>
             </plugin>
         </plugins>
     </build>

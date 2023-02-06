@@ -12,6 +12,7 @@ services:
       - "5005:5005"
     env_file:
       - src/main/resources/aws.properties
+      - src/main/resources/aws.secrets.properties
   test:
     image: ${PROJECT_NAME}:test
     container_name: ${PROJECT_NAME}-test
@@ -20,6 +21,7 @@ services:
       target: test
     env_file:
       - src/main/resources/aws.properties
+      - src/main/resources/aws.secrets.properties
   verify:
     image: ${PROJECT_NAME}:verify
     container_name: ${PROJECT_NAME}-verify
@@ -28,3 +30,4 @@ services:
       target: verify
     env_file:
       - src/main/resources/aws.properties
+      - src/main/resources/aws.secrets.properties

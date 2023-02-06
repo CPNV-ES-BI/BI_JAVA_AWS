@@ -3,9 +3,9 @@ package com.cpnv.bijavaaws.config;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.PropertySource;
 
 import io.awspring.cloud.core.region.StaticRegionProvider;
-import org.springframework.context.annotation.PropertySource;
 import software.amazon.awssdk.auth.credentials.AwsBasicCredentials;
 import software.amazon.awssdk.auth.credentials.AwsCredentials;
 import software.amazon.awssdk.auth.credentials.AwsCredentialsProvider;
@@ -14,6 +14,7 @@ import software.amazon.awssdk.regions.providers.AwsRegionProvider;
 
 @Configuration
 @PropertySource("classpath:aws.properties")
+@PropertySource(value = "classpath:aws.secrets.properties", ignoreResourceNotFound = true)
 class AwsConfiguration {
 
     @Value("${AWS_REGION}")
