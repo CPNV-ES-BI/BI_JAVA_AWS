@@ -5,7 +5,6 @@ services:
     image: ${PROJECT_NAME:?err}:development
     container_name: ${PROJECT_NAME}-development
     build:
-      dockerfile: docker/Dockerfile
       target: development
     ports:
       - "8080:8080"
@@ -17,7 +16,6 @@ services:
     image: ${PROJECT_NAME}:test
     container_name: ${PROJECT_NAME}-test
     build:
-      dockerfile: docker/Dockerfile
       target: test
     env_file:
       - src/main/resources/aws.properties
@@ -26,7 +24,6 @@ services:
     image: ${PROJECT_NAME}:verify
     container_name: ${PROJECT_NAME}-verify
     build:
-      dockerfile: docker/Dockerfile
       target: verify
     env_file:
       - src/main/resources/aws.properties

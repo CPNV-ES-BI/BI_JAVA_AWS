@@ -1,9 +1,12 @@
 # Folder structure
 
 ```text
+|   .dockerignore
+|   .env
 |   .gitattributes
 |   .gitignore
 |   docker-compose.yml
+|   Dockerfile
 |   LICENSE.md
 |   GNUmakefile
 |   mvnw
@@ -17,9 +20,6 @@
 |   |   FOLDER_STRUCTURE.md
 |   +---classes
 |   \---sequences
-+---Docker
-|   |   .dockerignore
-|   |   Dockerfile
 +---src
     +---main
     |   +---java
@@ -47,12 +47,16 @@ Here is an explanation of the project folders structure:
 
 ## Files at the root of the project
 
+- `.env`: Contains environment variables that are used by Docker Compose. It is used to configure the project name.
+- `.dockerignore`: Lists patterns for files and directories that Docker should ignore when building an image.
 - `.gitattributes`: Specifies attributes for files in a Git repository. It is used to tell Git how to treat
   certain files and can be used to set things like text encoding or end-of-line characters.
 - `.gitignore`: Lists patterns for files and directories that Git should ignore when adding files to the
   repository or when checking for changes.
 - `docker-compose.yml`: Is used to define and run multi-container Docker applications. It allows you to define
   the services that make up your application and how they should be deployed and run.
+- `Dockerfile`: Text document that contains all the commands a user could call on the command line to
+  assemble an image. It is used to automate the image build process.
 - `LICENSE.md`: Likely contains information about the license under which the project is released.
 - `GNUmakefile`: Is used to define commands that can be run from the command line to automate tasks. It is
   typically used to build and test software projects, but can be used for any kind of automation.
@@ -71,11 +75,6 @@ Here is an explanation of the project folders structure:
   sequence diagrams.
     - `classes`: Class diagrams images and the PlantUML source files used to generate them.
     - `sequences`: Sequence diagram images and the PlantUML source files used to generate them.
-- `docker`: Files related to Docker, such as a `Dockerfile` used to build a Docker image for the
-  project.
-    - `.dockerignore`: Lists patterns for files and directories that Docker should ignore when building
-      an image.
-    - `Dockerfile`: Instructions for building a Docker image.
 - `src`: The source code. It is divided into `main` and `test` directories for
   production code and test code, respectively.
     - `main` : The production code.
