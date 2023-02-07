@@ -1,7 +1,7 @@
 package com.cpnv.bijavaaws.service;
 
-import com.cpnv.bijavaaws.exceptions.ObjectAlreadyExistsException;
-import com.cpnv.bijavaaws.exceptions.ObjectNotFoundException;
+import com.cpnv.bijavaaws.exception.ObjectAlreadyExistsException;
+import com.cpnv.bijavaaws.exception.ObjectNotFoundException;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;

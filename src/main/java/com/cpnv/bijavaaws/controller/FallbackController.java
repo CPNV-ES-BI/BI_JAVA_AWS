@@ -1,7 +1,7 @@
 package com.cpnv.bijavaaws.controller;
 
-import com.cpnv.bijavaaws.exceptions.ObjectAlreadyExistsException;
-import com.cpnv.bijavaaws.exceptions.ObjectNotFoundException;
+import com.cpnv.bijavaaws.exception.ObjectAlreadyExistsException;
+import com.cpnv.bijavaaws.exception.ObjectNotFoundException;
 import org.apache.tika.mime.MimeTypeException;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;

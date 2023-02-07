@@ -1,8 +1,8 @@
 package com.cpnv.bijavaaws.service;
 
 import com.cpnv.bijavaaws.BIJavaAWSApplication;
-import com.cpnv.bijavaaws.exceptions.ObjectAlreadyExistsException;
-import com.cpnv.bijavaaws.exceptions.ObjectNotFoundException;
+import com.cpnv.bijavaaws.exception.ObjectAlreadyExistsException;
+import com.cpnv.bijavaaws.exception.ObjectNotFoundException;
 import com.cpnv.bijavaaws.config.ConfigMock;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
