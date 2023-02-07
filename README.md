@@ -5,10 +5,13 @@
     * [Requirements](#requirements)
     * [Configuration](#configuration)
         * [AWS properties](#aws-properties)
+            * [Non-sensitive properties](#non-sensitive-properties)
+            * [Sensitive properties](#sensitive-properties)
     * [Installation](#installation)
     * [Usage](#usage)
     * [Tests](#tests)
     * [Docker](#docker)
+    * [Folder structure](#folder-structure)
     * [Contributing](#contributing)
     * [License](#license)
     * [Contact](#contact)
@@ -36,7 +39,7 @@ The configuration is done through properties files. They are located in the `src
 
 ### AWS properties
 
-#### aws.properties file
+#### Non-sensitive properties
 
 The application need some properties to access the AWS S3 service. They are required in all environments, either
 locally, in a docker container or in the CI/CD pipeline.
@@ -48,7 +51,7 @@ There is already an `aws.properties` file that containing non-sensitive informat
 | AWS_REGION      | AWS region where the commands will be run |
 | AWS_BUCKET_NAME | S3 bucket name to use inside the service  |
 
-#### Sensitive
+#### Sensitive properties
 
 <span style="color:red">**NOTE:**</span> The file `aws.secrets.properties` containing sensitive information is missing
 from the repository. It should be created manually and never be committed to the repository.
