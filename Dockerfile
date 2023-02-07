@@ -4,7 +4,7 @@ ARG WORKDIR=/app
 #############
 ### Build ###
 #############
-FROM openjdk:${JAVA_VERSION}-jdk-alpine as build
+FROM eclipse-temurin:${JAVA_VERSION}-jdk-alpine as build
 ARG WORKDIR
 ENV WORKDIR=$WORKDIR
 ENV mvn=./mvnw
