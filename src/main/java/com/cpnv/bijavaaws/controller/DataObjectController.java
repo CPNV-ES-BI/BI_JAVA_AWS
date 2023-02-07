@@ -38,7 +38,7 @@ public class DataObjectController {
 
     @ApiOperation(value = "Create an object in the S3 bucket")
     @PostMapping("/objects")
-    public ResponseEntity<String> createObject(
+    public ResponseEntity<String> create(
             @RequestParam(name = "file", required = false) @NotNull MultipartFile file,
             @RequestParam(name = "key", required = false) @NotNull @NotEmpty @NotBlank String key
     ) {
@@ -49,7 +49,7 @@ public class DataObjectController {
 
     @ApiOperation(value = "Download an object from the S3 bucket")
     @GetMapping("/objects/{key}")
-    public ResponseEntity<byte[]> downloadObject(
+    public ResponseEntity<byte[]> download(
             @PathVariable String key,
             @RequestHeader(HttpHeaders.CONTENT_TYPE) @NotNull @NotEmpty @NotBlank String contentType
     ) throws MimeTypeException {
@@ -61,7 +61,7 @@ public class DataObjectController {
 
     @ApiOperation(value = "Delete an object from the S3 bucket")
     @DeleteMapping("/objects/{key}")
-    public ResponseEntity<String> deleteObject(
+    public ResponseEntity<String> delete(
             @PathVariable String key,
             @RequestParam(name = "recursive", required = false) boolean recursive,
             @RequestHeader(HttpHeaders.CONTENT_TYPE) @NotNull @NotEmpty @NotBlank String contentType
@@ -72,7 +72,7 @@ public class DataObjectController {
 
     @ApiOperation(value = "Publish an object from the S3 bucket")
     @PatchMapping("/objects/{key}/publish")
-    public ResponseEntity<URL> publishObject(
+    public ResponseEntity<URL> publish(
             @ApiParam(value = "Value of the object key") @PathVariable String key,
             @RequestHeader(HttpHeaders.CONTENT_TYPE) @NotNull @NotEmpty @NotBlank String contentType
     ) throws MimeTypeException {
