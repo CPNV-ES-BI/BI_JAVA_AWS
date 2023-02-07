@@ -39,8 +39,8 @@ public class DataObjectController {
     @ApiOperation(value = "Create an object in the S3 bucket")
     @PostMapping("/objects")
     public ResponseEntity<String> createObject(
-            @RequestParam("file") @NotNull MultipartFile file,
-            @RequestParam(name = "key") @NotEmpty @NotBlank @NotNull String key
+            @RequestParam(name = "file", required = false) @NotNull MultipartFile file,
+            @RequestParam(name = "key", required = false) @NotNull @NotEmpty @NotBlank String key
     ) {
         String extension = FilenameUtils.getExtension(file.getOriginalFilename());
         dataObject.createObject(file, key + "." + extension);
@@ -51,7 +51,7 @@ public class DataObjectController {
     @GetMapping("/objects/{key}")
     public ResponseEntity<byte[]> downloadObject(
             @PathVariable String key,
-            @RequestHeader(HttpHeaders.CONTENT_TYPE) @NotNull @NotEmpty String contentType
+            @RequestHeader(HttpHeaders.CONTENT_TYPE) @NotNull @NotEmpty @NotBlank String contentType
     ) throws MimeTypeException {
         return ResponseEntity.ok()
                 .contentType(MediaType.parseMediaType(contentType))
@@ -64,7 +64,7 @@ public class DataObjectController {
     public ResponseEntity<String> deleteObject(
             @PathVariable String key,
             @RequestParam(name = "recursive", required = false) boolean recursive,
-            @RequestHeader(HttpHeaders.CONTENT_TYPE) @NotNull @NotEmpty String contentType
+            @RequestHeader(HttpHeaders.CONTENT_TYPE) @NotNull @NotEmpty @NotBlank String contentType
     ) throws MimeTypeException {
         dataObject.deleteObject(this.getFullFileName(key, contentType), recursive);
         return ResponseEntity.status(HttpStatus.NO_CONTENT).body("Object deleted successfully");
@@ -74,7 +74,7 @@ public class DataObjectController {
     @PatchMapping("/objects/{key}/publish")
     public ResponseEntity<URL> publishObject(
             @ApiParam(value = "Value of the object key") @PathVariable String key,
-            @RequestHeader(HttpHeaders.CONTENT_TYPE) @NotNull @NotEmpty String contentType
+            @RequestHeader(HttpHeaders.CONTENT_TYPE) @NotNull @NotEmpty @NotBlank String contentType
     ) throws MimeTypeException {
         return ResponseEntity.status(HttpStatus.OK).body(dataObject.publishObject(this.getFullFileName(key, contentType)));
     }

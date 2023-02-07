@@ -13,6 +13,9 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.annotation.Bean;
 import org.springframework.core.env.Environment;
 import org.springframework.util.StringUtils;
+import org.springframework.web.servlet.config.annotation.PathMatchConfigurer;
+import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
+import org.springframework.web.util.UrlPathHelper;
 import springfox.documentation.swagger2.annotations.EnableSwagger2;
 
 import java.util.ArrayList;
@@ -21,10 +24,18 @@ import java.util.List;
 
 @SpringBootApplication
 @EnableSwagger2
-public class BIJavaAWSApplication {
+public class BIJavaAWSApplication implements WebMvcConfigurer {
 
     public static void main(String[] args) {
+        System.setProperty("org.apache.tomcat.util.buf.UDecoder.ALLOW_ENCODED_SLASH", "true");
         SpringApplication.run(BIJavaAWSApplication.class, args);
+    }
+
+    @Override
+    public void configurePathMatch(PathMatchConfigurer configurer) {
+        UrlPathHelper urlPathHelper = new UrlPathHelper();
+        urlPathHelper.setUrlDecode(false);
+        configurer.setUrlPathHelper(urlPathHelper);
     }
 
 
