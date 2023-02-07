@@ -4,15 +4,22 @@ ARG WORKDIR=/app
 #############
 ### Build ###
 #############
-FROM eclipse-temurin:${JAVA_VERSION}-jdk-alpine as build
+FROM openjdk:${JAVA_VERSION}-jdk-alpine as build
 ARG WORKDIR
 ENV WORKDIR=$WORKDIR
 ENV mvn=./mvnw
+ENV USER=bi-java-aws
 WORKDIR $WORKDIR
 
 COPY ./.mvn .mvn
 COPY $mvn ./
 RUN chmod +x $mvn
+
+RUN addgroup -S -g 1000 $USER && \
+    adduser -S -u 1000 -G $USER $USER && \
+    chown -R $USER:$USER $WORKDIR
+
+USER bi-java-aws
 
 # To always use the local repository and be able to run commands offline
 RUN mkdir -p $WORKDIR/.m2/repository && echo \
