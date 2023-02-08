@@ -11,26 +11,16 @@ jobs:
     name: Run test suite and verify code coverage
     runs-on: ubuntu-latest
     env:
-      PROPERTY_FILE: src/main/resources/aws.properties
-      AWS_REGION: ${{ secrets.AWS_REGION }}
+      SECRET_FILE: src/main/resources/aws.secrets.properties
       AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
       AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
-      AWS_BUCKET_NAME: ${{ secrets.AWS_BUCKET_NAME }}
 
     steps:
       - name: Checkout code
         uses: actions/checkout@v3
 
-      - name: Create aws properties file
-        run: |
-          touch ${{ env.PROPERTY_FILE }}
-            echo AWS_ACCESS_KEY_ID=${{ env.AWS_ACCESS_KEY_ID }} >> ${{ env.PROPERTY_FILE }}
-            echo AWS_SECRET_ACCESS_KEY=${{ env.AWS_SECRET_ACCESS_KEY }} >> ${{ env.PROPERTY_FILE }}
-            echo AWS_REGION=${{ env.AWS_REGION }} >> ${{ env.PROPERTY_FILE }}
-            echo AWS_BUCKET_NAME=${{ env.AWS_BUCKET_NAME }} >> ${{ env.PROPERTY_FILE }}
-
       - name: Build the Docker image
-        run: docker build . --tag bi_aws_microservice --file docker/Dockerfile --target verify
+        run: docker build . --tag bi_aws_microservice --target verify
 
       - name: Run the integrations tests
         run: docker run --env-file ${{ env.PROPERTY_FILE }} bi_aws_microservice:latest
