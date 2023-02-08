@@ -1,5 +1,6 @@
 package com.cpnv.bijavaaws.controller;
 
+import com.cpnv.bijavaaws.annotation.NonEmptyString;
 import com.cpnv.bijavaaws.service.DataObject;
 import com.cpnv.bijavaaws.service.ExtensionResolver;
 import io.swagger.annotations.Api;
@@ -14,8 +15,6 @@ import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
-import javax.validation.constraints.NotBlank;
-import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
 import java.net.URL;
 
@@ -41,7 +40,7 @@ public class DataObjectController {
     @PostMapping("/objects")
     public ResponseEntity<String> create(
             @RequestParam(name = "file") @NotNull MultipartFile file,
-            @RequestParam(name = "key") @NotNull @NotEmpty @NotBlank String key
+            @RequestParam(name = "key") @NonEmptyString String key
     ) throws MimeTypeException {
         dataObject.createObject(file, extensionResolver.extractMultipartFileDetails(key, file));
         return ResponseEntity.status(HttpStatus.CREATED).body("Object created successfully");
@@ -51,7 +50,7 @@ public class DataObjectController {
     @GetMapping("/objects/{key}")
     public ResponseEntity<byte[]> download(
             @PathVariable String key,
-            @RequestHeader(HttpHeaders.CONTENT_TYPE) @NotNull @NotEmpty @NotBlank String contentType
+            @RequestHeader(HttpHeaders.CONTENT_TYPE) @NonEmptyString String contentType
     ) throws MimeTypeException {
         String fullFileName = extensionResolver.extractContentTypeDetails(key, contentType);
         return ResponseEntity.ok()
@@ -76,7 +75,7 @@ public class DataObjectController {
     @PatchMapping("/objects/{key}/publish")
     public ResponseEntity<URL> publish(
             @PathVariable String key,
-            @RequestHeader(HttpHeaders.CONTENT_TYPE) @NotNull @NotEmpty @NotBlank String contentType
+            @RequestHeader(HttpHeaders.CONTENT_TYPE) @NonEmptyString String contentType
     ) throws MimeTypeException {
         return ResponseEntity.ok(dataObject.publishObject(extensionResolver.extractContentTypeDetails(key, contentType)));
     }
