@@ -1,34 +1,32 @@
 ARG JAVA_VERSION=17
-ARG WORKDIR=/app
+ARG APP_NAME=bi-java-aws
+ARG HOME=/home/$APP_NAME
+ARG WORKDIR=/home/$APP_NAME/app
 
 #############
 ### Build ###
 #############
 FROM openjdk:${JAVA_VERSION}-jdk-alpine as build
+ARG APP_NAME
+ARG HOME
 ARG WORKDIR
-ENV WORKDIR=$WORKDIR
 ENV mvn=./mvnw
-ENV USER=bi-java-aws
+
 WORKDIR $WORKDIR
+
+VOLUME $HOME/.m2
+# Spring Boot application creates working directories for Tomcat by default at /tmp.
+VOLUME /tmp
 
 COPY ./.mvn .mvn
 COPY $mvn ./
 RUN chmod +x $mvn
 
-RUN addgroup -S -g 1000 $USER && \
-    adduser -S -u 1000 -G $USER $USER && \
-    chown -R $USER:$USER $WORKDIR
+RUN addgroup -S -g 1000 $APP_NAME && \
+    adduser -S -u 1000 -G $APP_NAME $APP_NAME && \
+    chown -R $APP_NAME:$APP_NAME $WORKDIR
 
-USER bi-java-aws
-
-# To always use the local repository and be able to run commands offline
-RUN mkdir -p $WORKDIR/.m2/repository && echo \
-    "<settings xmlns='http://maven.apache.org/SETTINGS/1.0.0\' \
-    xmlns:xsi='http://www.w3.org/2001/XMLSchema-instance' \
-    xsi:schemaLocation='http://maven.apache.org/SETTINGS/1.0.0 https://maven.apache.org/xsd/settings-1.0.0.xsd'> \
-        <localRepository>$WORKDIR/.m2/repository</localRepository> \
-    </settings>" \
-    > $WORKDIR/.m2/settings.xml;
+USER $APP_NAME
 
 COPY pom.xml ./
 RUN $mvn de.qaware.maven:go-offline-maven-plugin:resolve-dependencies clean
@@ -41,22 +39,21 @@ RUN $mvn package -o -DskipTests
 ###################
 FROM eclipse-temurin:${JAVA_VERSION}-jre-alpine AS production
 ARG WORKDIR
-ENV SERVICE=bi-java-aws
+
 WORKDIR $WORKDIR
 
-COPY --from=build $WORKDIR/target/$SERVICE*.jar $SERVICE.jar
+COPY --from=build $WORKDIR/target/$APP_NAME*.jar $APP_NAME.jar
 
 ###################
 ### Development ###
 ###################
 FROM production AS development
-ENTRYPOINT java -Xdebug -Xrunjdwp:transport=dt_socket,server=y,suspend=n,address=*:5005 -jar $SERVICE.jar
+ENTRYPOINT java -Xdebug -Xrunjdwp:transport=dt_socket,server=y,suspend=n,address=*:5005 -jar $APP_NAME.jar
 
 ############
 ### Test ###
 ############
 FROM build as test
-COPY --from=build $WORKDIR/.m2/repository $WORKDIR/.m2/repository
 COPY ./src/test ./src/test
 CMD $mvn test -o
 
@@ -64,5 +61,4 @@ CMD $mvn test -o
 ### Verify ###
 ##############
 FROM test as verify
-COPY --from=build $WORKDIR/.m2/repository $WORKDIR/.m2/repository
 CMD $mvn verify -o

@@ -20,7 +20,7 @@ jobs:
         uses: actions/checkout@v3
 
       - name: Build the Docker image
-        run: docker build . --tag bi_aws_microservice --target verify
+        run: docker build . --tag bi-java-aws:test --target verify
 
       - name: Run the integrations tests
         run: docker run --env-file ${{ env.PROPERTY_FILE }} bi_aws_microservice:latest
