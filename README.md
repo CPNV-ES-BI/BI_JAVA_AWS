@@ -93,7 +93,7 @@ The API documentation is available from swagger `http://localhost:8080/swagger-u
 
 For any filename containing a slash, you have to encode the url that contains the slash to avoid that the router interprets the slash as the name of a route.
 
-For example `dir/filename` becomes `dir%2Filename`
+For example `/api/objects/dir/filename` becomes `/api/objects/dir%2Ffilename`
 ## Tests
 
 _The coverage report is generated in the maven `test` phase, so everytime you run test(s), the report will be
