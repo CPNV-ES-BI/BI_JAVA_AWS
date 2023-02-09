@@ -14,6 +14,7 @@ WORKDIR $WORKDIR
 
 COPY ./.mvn .mvn
 COPY $mvn ./
+RUN chmod +x $mvn
 
 COPY pom.xml ./
 ARG HOME
