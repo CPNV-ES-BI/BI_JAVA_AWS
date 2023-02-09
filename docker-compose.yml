@@ -10,7 +10,6 @@ services:
       - "8080:8080"
       - "5005:5005"
     env_file:
-      - src/main/resources/aws.properties
       - src/main/resources/aws.secrets.properties
   test:
     image: ${PROJECT_NAME}:test
@@ -18,7 +17,6 @@ services:
     build:
       target: test
     env_file:
-      - src/main/resources/aws.properties
       - src/main/resources/aws.secrets.properties
   verify:
     image: ${PROJECT_NAME}:verify
@@ -26,5 +24,4 @@ services:
     build:
       target: verify
     env_file:
-      - src/main/resources/aws.properties
       - src/main/resources/aws.secrets.properties
