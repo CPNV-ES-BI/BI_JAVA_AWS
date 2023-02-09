@@ -10,9 +10,6 @@ jobs:
   test:
     name: Run test suite and verify code coverage
     runs-on: ubuntu-latest
-    env:
-      AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
-      AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
 
     steps:
       - name: Checkout code
@@ -24,6 +21,16 @@ jobs:
           distribution: 'temurin'
           java-version: '17'
           cache: 'maven'
+
+      - name: Create aws properties file
+        env:
+          AWS_SECRET_FILE: src/test/resources/aws.properties
+          AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+        run: |
+          touch ${{ env.AWS_SECRET_FILE }}
+            echo AWS_ACCESS_KEY_ID=${{ env.AWS_ACCESS_KEY_ID }} >> ${{ env.PROPERTY_FILE }}
+            echo AWS_SECRET_ACCESS_KEY=${{ env.AWS_SECRET_ACCESS_KEY }} >> ${{ env.PROPERTY_FILE }}
 
       - name: Run the integrations tests
         run: mvn clean verify
