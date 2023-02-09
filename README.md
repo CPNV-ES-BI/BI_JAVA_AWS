@@ -89,9 +89,9 @@ All available endpoints (api not included):
 
 The API documentation is available from swagger `http://localhost:8080/swagger-ui/`.
 
-### File name with a slash
+### File name with a forward slash
 
-For any filename containing a slash, you have to encode the url that contains the slash to avoid that the router interprets the slash as the name of a route.
+To prevent the router from interpreting a forward slash (/) as a route name, you must encode the URL that contains the forward slash if the filename contains one.
 
 For example `/api/objects/dir/filename` becomes `/api/objects/dir%2Ffilename`
 ## Tests
