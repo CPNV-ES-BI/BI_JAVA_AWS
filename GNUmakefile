@@ -9,9 +9,9 @@ test: # (Maven) Run tests
 	mvn clean test
 verify: # (Maven) Run tests and verify test coverage
 	mvn clean verify
-docker-up: # (Docker Compose) Run spring boot application in development mode
+docker-dev: # (Docker Compose) Run spring boot application in development mode
 	docker compose up development --build --force-recreate
-docker-up-test:  # (Docker Compose) Run tests
+docker-test:  # (Docker Compose) Run tests
 	docker compose up test --build --force-recreate
-docker-up-verify:  # (Docker Compose) Run tests and verify test coverage
+docker-verify:  # (Docker Compose) Run tests and verify test coverage
 	docker compose up verify --build --force-recreate
