@@ -20,6 +20,8 @@ jobs:
 
       - name: Build the Docker image
         run: docker build . --tag bi-java-aws:verify --target verify
+        env:
+          DOCKER_BUILDKIT: 1
 
       - name: Run the integrations tests
         run: docker run bi-java-aws:verify
