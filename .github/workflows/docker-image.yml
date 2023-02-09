@@ -11,7 +11,6 @@ jobs:
     name: Run test suite and verify code coverage
     runs-on: ubuntu-latest
     env:
-      SECRET_FILE: src/main/resources/aws.secrets.properties
       AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
       AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
 
@@ -20,7 +19,7 @@ jobs:
         uses: actions/checkout@v3
 
       - name: Build the Docker image
-        run: docker build . --tag bi-java-aws:test --target verify
+        run: docker build . --tag bi-java-aws:verify --target verify
 
       - name: Run the integrations tests
-        run: docker run --env-file ${{ env.PROPERTY_FILE }} bi_aws_microservice:latest
+        run: docker run bi-java-aws:verify
