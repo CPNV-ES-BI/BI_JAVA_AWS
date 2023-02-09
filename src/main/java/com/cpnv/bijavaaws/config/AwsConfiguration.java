@@ -11,6 +11,7 @@ import software.amazon.awssdk.auth.credentials.AwsCredentials;
 import software.amazon.awssdk.auth.credentials.AwsCredentialsProvider;
 import software.amazon.awssdk.auth.credentials.StaticCredentialsProvider;
 import software.amazon.awssdk.regions.providers.AwsRegionProvider;
+import software.amazon.awssdk.services.s3.presigner.S3Presigner;
 
 @Configuration
 @PropertySource("classpath:aws.properties")
@@ -38,5 +39,13 @@ class AwsConfiguration {
 
     private AwsCredentials awsCredentials() {
         return AwsBasicCredentials.create(accessKeyId, secretAccessKey);
+    }
+
+    @Bean
+    S3Presigner s3Presigner() {
+        return S3Presigner.builder()
+                .credentialsProvider(awsCredentialsProvider())
+                .region(awsRegionProvider().getRegion())
+                .build();
     }
 }
