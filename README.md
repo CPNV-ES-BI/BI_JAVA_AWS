@@ -5,10 +5,13 @@
     * [Requirements](#requirements)
     * [Configuration](#configuration)
         * [AWS properties](#aws-properties)
+            * [Non-sensitive properties](#non-sensitive-properties)
+            * [Sensitive properties](#sensitive-properties)
     * [Installation](#installation)
     * [Usage](#usage)
     * [Tests](#tests)
     * [Docker](#docker)
+    * [Folder structure](#folder-structure)
     * [Contributing](#contributing)
     * [License](#license)
     * [Contact](#contact)
@@ -36,23 +39,38 @@ The configuration is done through properties files. They are located in the `src
 
 ### AWS properties
 
-Copy the `aws.example.properties` file and rename it to `aws.properties`.
+#### Non-sensitive properties
 
-```bash
-cp src/main/resources/aws.example.properties src/main/resources/aws.properties
+The application need some properties to access the AWS S3 service. They are required in all environments, either
+locally, in a docker container or in the CI/CD pipeline.
+
+There is already an `aws.properties` file that containing non-sensitive information :
+
+| Property Name   | Description                               |
+|-----------------|-------------------------------------------|
+| AWS_REGION      | AWS region where the commands will be run |
+| AWS_BUCKET_NAME | S3 bucket name to use inside the service  |
+
+#### Sensitive properties
+
+<span style="color:red">**NOTE:**</span> The file `aws.secrets.properties` containing sensitive information is missing
+from the repository. It should be created manually and never be committed to the repository.
+
+Create a new file named `aws.secrets.properties` in the `src/main/resources` folder.
+
+```shell
+# Bash
+echo -e "AWS_ACCESS_KEY_ID=\nAWS_SECRET_ACCESS_KEY=" > src/main/resources/aws.secrets.properties
+# Powershell
+Set-Content -Path src/main/resources/aws.secrets.properties -Value "AWS_ACCESS_KEY_ID=", "AWS_SECRET_ACCESS_KEY="
 ```
 
-<span style="color:red">**NOTE:**</span> The `aws.properties` contains sensitive information and should not be committed
-to the repository.
+Fill in the `aws.secret.properties` file with the following information:
 
-Fill in the `aws.properties` file with the following information:
-
-| Property Name         | Description                              | Example Value                            |
-|-----------------------|------------------------------------------|------------------------------------------|
-| AWS_REGION            | AWS region                               | us-east-1                                |
-| AWS_ACCESS_KEY_ID     | S3 key id                                | AKIAIOSFODNN7EXAMPLE                     |
-| AWS_SECRET_ACCESS_KEY | S3 secret name                           | wJalrXUtnFEMI/K7MDENG/bPxRfiCYEXAMPLEKEY |
-| AWS_BUCKET_NAME       | S3 bucket name to use inside the service | my-bucket                                |
+| Property Name         | Description    |
+|-----------------------|----------------|
+| AWS_ACCESS_KEY_ID     | S3 key id      |
+| AWS_SECRET_ACCESS_KEY | S3 secret name |
 
 ## Installation
 
@@ -143,6 +161,10 @@ docker compose up development --build
 # or
 make docker-up
 ```
+
+A debug port `5005` is exposed using
+the [JDWP](https://docs.oracle.com/javase/8/docs/technotes/guides/jpda/jdwp-spec.html) (Java Debug Wire Protocol)
+protocol in the `development` image. You can connect to it using your IDE.
 
 Run the tests:
 

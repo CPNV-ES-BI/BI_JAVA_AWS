@@ -6,25 +6,29 @@ import com.cpnv.bijavaaws.exception.ObjectNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
 import java.io.InputStream;
 import java.net.URL;
 
-import org.springframework.web.multipart.MultipartFile;
 import software.amazon.awssdk.core.sync.RequestBody;
 import software.amazon.awssdk.services.s3.S3Client;
+import software.amazon.awssdk.services.s3.model.DeleteObjectRequest;
 import software.amazon.awssdk.services.s3.model.NoSuchKeyException;
 import software.amazon.awssdk.services.s3.model.PutObjectRequest;
 import software.amazon.awssdk.services.s3.presigner.S3Presigner;
 import software.amazon.awssdk.services.s3.presigner.model.PresignedGetObjectRequest;
 
 @Component
+@SuppressWarnings("SpringJavaAutowiredFieldsWarningInspection")
 public class DataObjectImpl implements DataObject {
 
-    @SuppressWarnings("SpringJavaAutowiredFieldsWarningInspection")
     @Autowired
     private S3Client s3Client;
+
+    @Autowired
+    private S3Presigner s3Presigner;
 
     @Value("${AWS_BUCKET_NAME}")
     private String bucketName;
@@ -59,12 +63,12 @@ public class DataObjectImpl implements DataObject {
     /**
      * Creates and store an object.
      *
-     * @param file the path of the object to be uploaded.
-     * @param objectKey  the path to the destination file.
+     * @param file      the path of the object to be uploaded.
+     * @param objectKey the path to the destination file.
      * @throws ObjectAlreadyExistsException if the object already exists.
      */
     @Override
-    public void createObject(MultipartFile file, String objectKey)  {
+    public void createObject(MultipartFile file, String objectKey) {
         if (doesExist(objectKey))
             throw new ObjectAlreadyExistsException(objectKey);
 
@@ -111,13 +115,10 @@ public class DataObjectImpl implements DataObject {
         if (!doesExist(key))
             throw new ObjectNotFoundException(key);
 
-        PresignedGetObjectRequest presignedGetObjectRequest;
-        try (S3Presigner s3Presigner = S3Presigner.create()) {
-            presignedGetObjectRequest = s3Presigner.presignGetObject(presignBuilder -> presignBuilder
-                    .signatureDuration(java.time.Duration.ofMinutes(5))
-                    .getObjectRequest(getObjectBuilder -> getObjectBuilder.bucket(bucketName).key(key).build())
-            );
-        }
+        PresignedGetObjectRequest presignedGetObjectRequest = s3Presigner.presignGetObject(builder -> builder
+                .signatureDuration(java.time.Duration.ofMinutes(5))
+                .getObjectRequest(getObjectBuilder -> getObjectBuilder.bucket(bucketName).key(key).build())
+        );
 
         return presignedGetObjectRequest.url();
     }
@@ -130,13 +131,18 @@ public class DataObjectImpl implements DataObject {
      */
     @Override
     public void deleteObject(String key, boolean isRecursive) {
-        if (isRecursive) {
-            var objects = s3Client.listObjects(builder -> builder.bucket(bucketName).prefix(key));
-            objects.contents().forEach(s3Object -> s3Client.deleteObject(builder -> builder.bucket(bucketName).key(s3Object.key())));
-        } else {
-            if (!doesExist(key)) throw new ObjectNotFoundException(key);
-            s3Client.deleteObject(builder -> builder.bucket(bucketName).key(key));
-        }
+        if (isRecursive)
+            deleteObjectRecursive(key);
+        else
+            deleteObject(key);
+    }
+
+    private void deleteObjectRecursive(String key) {
+        var objects = s3Client.listObjects(builder -> builder.bucket(bucketName).prefix(key));
+        objects.contents().forEach(s3Object -> {
+            var deleteObjectRequest = DeleteObjectRequest.builder().bucket(bucketName).key(s3Object.key()).build();
+            s3Client.deleteObject(deleteObjectRequest);
+        });
     }
 
     /**
@@ -145,6 +151,9 @@ public class DataObjectImpl implements DataObject {
      * @param key the object key.
      */
     public void deleteObject(String key) {
-        deleteObject(key, false);
+        if (!doesExist(key))
+            throw new ObjectNotFoundException(key);
+
+        s3Client.deleteObject(builder -> builder.bucket(bucketName).key(key));
     }
 }

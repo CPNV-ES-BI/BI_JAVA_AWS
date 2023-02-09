@@ -1,28 +1,27 @@
 version: '3.9'
+# PROJECT_NAME is stored in .env file
 services:
   development:
-    container_name: development
+    image: ${PROJECT_NAME:?err}:development
+    container_name: ${PROJECT_NAME}-development
     build:
-        context: .
-        dockerfile: docker/Dockerfile
-        target: development
+      target: development
     ports:
       - "8080:8080"
+      - "5005:5005"
     env_file:
-      - src/main/resources/aws.properties
+      - src/main/resources/aws.secrets.properties
   test:
-    container_name: test
+    image: ${PROJECT_NAME}:test
+    container_name: ${PROJECT_NAME}-test
     build:
-        context: .
-        dockerfile: docker/Dockerfile
-        target: test
+      target: test
     env_file:
-      - src/main/resources/aws.properties
+      - src/main/resources/aws.secrets.properties
   verify:
-    container_name: verify
+    image: ${PROJECT_NAME}:verify
+    container_name: ${PROJECT_NAME}-verify
     build:
-        context: .
-        dockerfile: docker/Dockerfile
-        target: verify
+      target: verify
     env_file:
-      - src/main/resources/aws.properties
+      - src/main/resources/aws.secrets.properties

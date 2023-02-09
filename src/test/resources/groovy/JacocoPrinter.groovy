@@ -1,3 +1,7 @@
+package groovy
+
+import groovy.xml.XmlSlurper
+
 def reportFile = new File("target/site/jacoco/index.html")
 
 if (!reportFile.exists() || !reportFile.canRead()) {

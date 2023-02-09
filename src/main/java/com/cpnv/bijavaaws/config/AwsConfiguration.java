@@ -3,17 +3,19 @@ package com.cpnv.bijavaaws.config;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.PropertySource;
 
 import io.awspring.cloud.core.region.StaticRegionProvider;
-import org.springframework.context.annotation.PropertySource;
 import software.amazon.awssdk.auth.credentials.AwsBasicCredentials;
 import software.amazon.awssdk.auth.credentials.AwsCredentials;
 import software.amazon.awssdk.auth.credentials.AwsCredentialsProvider;
 import software.amazon.awssdk.auth.credentials.StaticCredentialsProvider;
 import software.amazon.awssdk.regions.providers.AwsRegionProvider;
+import software.amazon.awssdk.services.s3.presigner.S3Presigner;
 
 @Configuration
 @PropertySource("classpath:aws.properties")
+@PropertySource(value = "classpath:aws.secrets.properties", ignoreResourceNotFound = true)
 class AwsConfiguration {
 
     @Value("${AWS_REGION}")
@@ -37,5 +39,13 @@ class AwsConfiguration {
 
     private AwsCredentials awsCredentials() {
         return AwsBasicCredentials.create(accessKeyId, secretAccessKey);
+    }
+
+    @Bean
+    S3Presigner s3Presigner() {
+        return S3Presigner.builder()
+                .credentialsProvider(awsCredentialsProvider())
+                .region(awsRegionProvider().getRegion())
+                .build();
     }
 }

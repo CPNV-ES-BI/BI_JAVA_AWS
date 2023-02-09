@@ -33,5 +33,5 @@ build/
 .vscode/
 
 ### Application specific ###
-aws.properties
+aws.secrets.properties
 *.jar
