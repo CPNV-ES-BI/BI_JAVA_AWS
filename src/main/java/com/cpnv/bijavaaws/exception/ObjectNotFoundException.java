@@ -1,4 +1,4 @@
-package com.example.bijavaaws.exceptions;
+package com.cpnv.bijavaaws.exception;
 
 public class ObjectNotFoundException extends RuntimeException {
     public ObjectNotFoundException(String objectKEy) {

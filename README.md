@@ -79,12 +79,21 @@ mvn spring-boot:run
 
 The base url is `http://localhost:8080`.
 
-All available endpoints:
+All available endpoints (api not included):
 
-| Endpoint         | Description  |
-|------------------|--------------|
-| /actuator/health | Health check |
+| Endpoint                   | Description                   | Method |
+|----------------------------|-------------------------------|--------|
+| /swagger-ui/               | Swagger UI                    | GET    |
+| /v3/api-docs               | Swagger JSON                  | GET    |
+| /actuator/health           | Health check                  | GET    |
 
+The API documentation is available from swagger `http://localhost:8080/swagger-ui/`.
+
+### File name with a forward slash
+
+To prevent the router from interpreting a forward slash (/) as a route name, you must encode the URL that contains the forward slash if the filename contains one.
+
+For example `/api/objects/dir/filename` becomes `/api/objects/dir%2Ffilename`
 ## Tests
 
 _The coverage report is generated in the maven `test` phase, so everytime you run test(s), the report will be

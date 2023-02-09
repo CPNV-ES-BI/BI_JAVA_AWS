@@ -1,17 +1,21 @@
-package com.example.bijavaaws.dataobject;
+package com.cpnv.bijavaaws.service;
 
-import com.example.bijavaaws.exceptions.ObjectAlreadyExistsException;
-import com.example.bijavaaws.exceptions.ObjectNotFoundException;
+import com.cpnv.bijavaaws.exception.ObjectAlreadyExistsException;
+import com.cpnv.bijavaaws.exception.ObjectNotFoundException;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
+import java.io.IOException;
+import java.io.InputStream;
 import java.net.URL;
-import java.nio.file.Path;
 
+import org.springframework.web.multipart.MultipartFile;
+import software.amazon.awssdk.core.sync.RequestBody;
 import software.amazon.awssdk.services.s3.S3Client;
 import software.amazon.awssdk.services.s3.model.NoSuchKeyException;
+import software.amazon.awssdk.services.s3.model.PutObjectRequest;
 import software.amazon.awssdk.services.s3.presigner.S3Presigner;
 import software.amazon.awssdk.services.s3.presigner.model.PresignedGetObjectRequest;
 
@@ -44,27 +48,40 @@ public class DataObjectImpl implements DataObject {
     /**
      * Creates and store an object. The future object key is the file name in the path.
      *
-     * @param sourcePath the path of the object to be uploaded.
+     * @param file the path of the object to be uploaded.
      * @throws ObjectAlreadyExistsException if the object already exists.
      */
-    public void createObject(Path sourcePath) {
-        String objectKey = sourcePath.getFileName().toString();
-        createObject(sourcePath, objectKey);
+    public void createObject(MultipartFile file) {
+        String objectKey = file.getOriginalFilename();
+        createObject(file, objectKey);
     }
 
     /**
-     * Creates and store an object. The future object key is the file name in the path.
+     * Creates and store an object.
      *
-     * @param sourcePath the path of the object to be uploaded.
+     * @param file the path of the object to be uploaded.
      * @param objectKey  the path to the destination file.
      * @throws ObjectAlreadyExistsException if the object already exists.
      */
     @Override
-    public void createObject(Path sourcePath, String objectKey) {
+    public void createObject(MultipartFile file, String objectKey)  {
         if (doesExist(objectKey))
             throw new ObjectAlreadyExistsException(objectKey);
 
-        s3Client.putObject(builder -> builder.bucket(bucketName).key(objectKey).build(), sourcePath);
+        InputStream inputStream;
+        try {
+            inputStream = file.getInputStream();
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+
+        PutObjectRequest putObjectRequest = PutObjectRequest.builder()
+                .bucket(bucketName)
+                .key(objectKey)
+                .build();
+        RequestBody requestBody = RequestBody.fromInputStream(inputStream, file.getSize());
+
+        s3Client.putObject(putObjectRequest, requestBody);
     }
 
     /**
