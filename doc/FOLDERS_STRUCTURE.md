@@ -24,20 +24,23 @@
     +---main
     |   +---java
     |   |   \---com
-    |   |       \---example
+    |   |       \---cpnv
     |   |           \---bijavaaws
+    |   |               +---annotation
     |   |               +---config
-    |   |               +---dataobject
-    |   |               \---exceptions
+    |   |               +---controller
+    |   |               +---exception
+    |   |               \---service
     |   \---resources
     |           application.properties
     |           aws.example.properties
     \---test
         +---java
         |   \---com
-        |       \---example
+        |       \---cpnv
         |           \---bijavaaws
-        |               \---dataobject
+        |               +---config
+        |               \---service
         \---resources
             \---data
             \---groovy
@@ -78,16 +81,19 @@ Here is an explanation of the project folders structure:
 - `src`: The source code. It is divided into `main` and `test` directories for
   production code and test code, respectively.
     - `main` : The production code.
-        - `java/com/example/bijavaaws`: Package containing the source code.
+        - `java/com/cpnv/bijavaaws`: Package containing the source code.
+            - `annotation`: Custom annotations.
             - `config`: Configuration classes.
-            - `dataobject`: Classes related to data objects.
-            - `exceptions`: Custom exceptions.
+            - `controller`: Classes related to the REST API.
+            - `exception`: Custom exceptions.
+            - `service`: Classes related to the business logic.
         - `resources`: Non-code resources, such as configuration files.
             - `application.properties`: Basic application configuration.
             - `aws.example.properties`: Example configuration for the AWS SDK.
     - `test` : The test code.
-        - `java/com/example/bijavaaws`: Package containing the test code.
-            - `dataobject`: Tests for the classes related to data objects.
+        - `java/com/cpnv/bijavaaws`: Package containing the test code.
+            - `service/DataObjectImplTest`: Tests for the classes related to data objects.
+            - `config/ConfigMock`: Mock configuration class.
         - `resources`: Non-code resources for the test code, such as test data files.
             - `data`: Test data files.
             - `groovy`: Groovy scripts used by the tests.
