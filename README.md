@@ -1,54 +1,93 @@
-# Spring Boot Microservice Docker
+# BI Java AWS
 
-## Table of Contents
-
-<!-- TOC -->
-* [Spring Boot Microservice Docker](#spring-boot-microservice-docker)
-  * [Table of Contents](#table-of-contents)
-  * [Introduction](#introduction)
-  * [Requirements](#requirements)
-  * [Docker](#docker)
-  * [Local](#local)
-  * [Usage](#usage)
-  * [Test](#test)
-  * [References](#references)
-<!-- TOC -->
+* [BI Java AWS](#bi-java-aws)
+    * [Introduction](#introduction)
+    * [Requirements](#requirements)
+    * [Configuration](#configuration)
+        * [AWS properties](#aws-properties)
+            * [Non-sensitive properties](#non-sensitive-properties)
+            * [Sensitive properties](#sensitive-properties)
+    * [Installation](#installation)
+    * [Usage](#usage)
+    * [Tests](#tests)
+    * [Docker](#docker)
+    * [Folder structure](#folder-structure)
+    * [Contributing](#contributing)
+    * [License](#license)
+    * [Contact](#contact)
+        * [Authors](#authors)
+        * [Reviewers](#reviewers)
 
 ## Introduction
 
-This is a Spring Boot microservice that can be run as a Docker container.
-It is a simple REST API that returns 'Hello World'.
+This is a Spring Boot microservice whose objective is to implement [AWS S3](https://aws.amazon.com/s3/) as a data
+source, in order to perform various techniques related to Business Intelligence.
 
 ## Requirements
 
-* Java 19
-* Maven
-* Docker
-* Docker Compose
+| Requirement     | Version  | Link                                                                                                                                                               |
+|-----------------|----------|--------------------------------------------------------------------------------------------------------------------------------------------------------------------|
+| Java            | 17       | [Link](https://docs.aws.amazon.com/corretto/latest/corretto-17-ug/downloads-list.html)                                                                             |
+| Maven           | 3.8.6    | [Link](https://maven.apache.org/download.cgi)                                                                                                                      |
+| Docker          | 20.10.17 | [Link](https://docs.docker.com/engine/install/)                                                                                                                    |
+| Docker Compose  | 1.29.2   | [Link](https://docs.docker.com/compose/install/) - Docker Desktop includes Docker Compose along with Docker Engine and Docker CLI which are Compose prerequisites. |
+| Make (optional) | 4.3      | There is a lot of ways to install Make, according to different OS. Check on Google the specific one for your OS (reason why it's optional)                         |
 
-## Docker
+## Configuration
 
-To build the Docker image, run the following command:
+The configuration is done through properties files. They are located in the `src/main/resources` folder.
 
-```bash
-./docker-build
+### AWS properties
+
+#### Non-sensitive properties
+
+The application need some properties to access the AWS S3 service. They are required in all environments, either
+locally, in a docker container or in the CI/CD pipeline.
+
+There is already an `aws.properties` file that containing non-sensitive information :
+
+| Property Name   | Description                               |
+|-----------------|-------------------------------------------|
+| AWS_REGION      | AWS region where the commands will be run |
+| AWS_BUCKET_NAME | S3 bucket name to use inside the service  |
+
+#### Sensitive properties
+
+<span style="color:red">**NOTE:**</span> The file `aws.secrets.properties` containing sensitive information is missing
+from the repository. It should be created manually and never be committed to the repository.
+
+Create a new file named `aws.secrets.properties` in the `src/main/resources` folder.
+
+```shell
+# Bash
+echo -e "AWS_ACCESS_KEY_ID=\nAWS_SECRET_ACCESS_KEY=" > src/main/resources/aws.secrets.properties
+# Powershell
+Set-Content -Path src/main/resources/aws.secrets.properties -Value "AWS_ACCESS_KEY_ID=", "AWS_SECRET_ACCESS_KEY="
 ```
 
-To run the Docker container, run the following command:
+Fill in the `aws.secret.properties` file with the following information:
+
+| Property Name         | Description    |
+|-----------------------|----------------|
+| AWS_ACCESS_KEY_ID     | S3 key id      |
+| AWS_SECRET_ACCESS_KEY | S3 secret name |
+
+## Installation
+
+Install dependencies:
 
 ```bash
-docker compose up
+mvn dependency:resolve
 ```
 
-## Local
-
-To install the application in local, run the following command:
+Build the project:
 
 ```bash
+# Skip tests to speed up the build
 mvn clean package -DskipTests
 ```
 
-To run the application in local, run the following command:
+Run the project:
 
 ```bash
 mvn spring-boot:run
@@ -56,22 +95,123 @@ mvn spring-boot:run
 
 ## Usage
 
-To get the 'Hello World' message, run the following command, or open the url in a browser.
+The base url is `http://localhost:8080`.
+
+All available endpoints (api not included):
+
+| Endpoint                   | Description                   | Method |
+|----------------------------|-------------------------------|--------|
+| /swagger-ui/               | Swagger UI                    | GET    |
+| /v3/api-docs               | Swagger JSON                  | GET    |
+| /actuator/health           | Health check                  | GET    |
+
+The API documentation is available from swagger `http://localhost:8080/swagger-ui/`.
+
+### File name with a forward slash
+
+To prevent the router from interpreting a forward slash (/) as a route name, you must encode the URL that contains the forward slash if the filename contains one.
+
+For example `/api/objects/dir/filename` becomes `/api/objects/dir%2Ffilename`
+## Tests
+
+_The coverage report is generated in the maven `test` phase, so everytime you run test(s), the report will be
+generated in the `target/site/jacoco` folder and printed in the console._
+
+Run the tests:
 
 ```bash
-curl http://localhost:8080
+mvn clean test
 ```
 
-## Test
-
-To run the tests in local, run the following command:
+Run a specific test:
 
 ```bash
-mvn test
+mvn clean test -Dtest=TestClassName#methodName
 ```
 
----
+Run the tests and check the code coverage:
 
-## References
+```bash
+mvn clean verify
+```
 
-* [Docker - Kickstart Your Spring Boot Application Development](https://www.docker.com/blog/kickstart-your-spring-boot-application-development/)
+With JaCoCo, the code coverage check is done in the `verify` phase. The threshold is set to 100% of instructions in the
+`DataObjectImpl` class. If the coverage is lower than the threshold, this will fail.
+
+## Docker
+
+You can also run the project/tests using Docker.
+
+Build the Docker image:
+
+```bash
+docker compose build development
+```
+
+Run the docker image:
+
+```bash
+docker compose up development
+```
+
+Run the docker image and build in the same time:
+
+```bash
+docker compose up development --build
+# or
+make docker-up
+```
+
+A debug port `5005` is exposed using
+the [JDWP](https://docs.oracle.com/javase/8/docs/technotes/guides/jpda/jdwp-spec.html) (Java Debug Wire Protocol)
+protocol in the `development` image. You can connect to it using your IDE.
+
+Run the tests:
+
+```bash
+docker compose up test --build
+# or
+make docker-up-test
+```
+
+Run a specific test:
+
+```bash
+docker-compose run --rm test ./mvnw test -Dtest=TestClassName#methodName
+```
+
+## Folder structure
+
+See the [folder structure](doc/FOLDERS_STRUCTURE.md) documentation.
+
+## Contributing
+
+We welcome contributions to this project! If you have an idea for a new feature or have found a bug, please open
+an issue on GitHub to let us know.
+
+If you would like to contribute code to the project, please follow these steps:
+
+1. Clone the repository to your local machine
+2. Create a new branch for your feature using `git flow feature start <feature-name>`
+3. Write and test your code
+4. Update the documentation as necessary
+5. Submit a pull request. Any pull request that does not pass the CI/CD pipeline or without new tests will be rejected.
+
+We will review your pull request and discuss any necessary changes before merging it.
+
+Thank you for considering contributing to this project!
+
+## License
+
+Distribution is permitted under the terms of the [MIT License](LICENSE.md).
+
+## Contact
+
+### Authors
+
+- [Yannick Baudraz](https://github.com/yannickcpnv)
+- [Anthony Bouillant](https://github.com/antbou)
+
+### Reviewers
+
+- [Nicolas Glassey](https://github.com/NicolasGlassey)

@@ -1,0 +1,29 @@
+@startuml DataObject_doesExist
+'https://plantuml.com/sequence-diagram
+
+legend top left
+    Project
+        BI_JAVA_AWS
+    Diagram
+        doesExist sequence [DataObject]
+    Authors
+        Yannick Baudraz
+        Anthony Bouillant
+endlegend
+
+actor "Client Service" as Client
+
+participant DataObject
+participant S3Client
+
+Client -> DataObject : doesExist(objectKey)
+DataObject -> S3Client : headObject(headObjectRequest)
+alt NoSuchKeyException
+    S3Client -> DataObject : NoSuchKeyException
+    DataObject -> Client : false
+else
+    S3Client -> DataObject : Response
+    DataObject -> Client : true
+end
+
+@enduml

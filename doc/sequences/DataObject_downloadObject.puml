@@ -1,0 +1,28 @@
+@startuml DataObject_downloadObject
+'https://plantuml.com/sequence-diagram
+
+legend top left
+    Project
+        BI_JAVA_AWS
+    Diagram
+        downloadObject sequence [DataObject]
+    Authors
+        Yannick Baudraz
+endlegend
+
+actor "Client Service" as Client
+
+participant DataObject
+participant S3Client
+
+Client -> DataObject: downloadObject(key)
+DataObject -> DataObject: doesExist(objectKey)
+alt false
+    DataObject -> Client: throw ObjectNotFoundException(key)
+else
+    DataObject -> S3Client: getObjectAsBytes(getObjectRequestBuilder)
+    S3Client --> DataObject: response
+    DataObject --> Client: bytes
+end
+
+@enduml

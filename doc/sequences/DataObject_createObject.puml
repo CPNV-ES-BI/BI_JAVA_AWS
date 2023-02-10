@@ -1,0 +1,26 @@
+@startuml DataObject_createObject
+'https://plantuml.com/sequence-diagram
+
+legend top left
+    Project
+        BI_JAVA_AWS
+    Diagram
+        createObject sequence [DataObject]
+    Authors
+        Yannick Baudraz
+endlegend
+
+actor "Client Service" as Client
+
+participant DataObject
+participant S3Client
+
+Client -> DataObject: createObject(path)
+DataObject -> DataObject: doesExist(objectKey)
+alt true
+    DataObject -> Client: throw ObjectAlreadyExistsException(objectKey)
+else
+    DataObject -> S3Client: putObject(putObjectRequest, path)
+end
+
+@enduml
