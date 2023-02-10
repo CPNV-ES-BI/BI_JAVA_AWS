@@ -54,7 +54,7 @@ public class DataObjectImpl implements DataObject {
      * @param file the path of the object to be uploaded.
      * @throws ObjectAlreadyExistsException if the object already exists.
      */
-    public void createObject(MultipartFile file) {
+    public void createObject(MultipartFile file) throws IOException {
         String objectKey = file.getOriginalFilename();
         createObject(file, objectKey);
     }
@@ -62,21 +62,16 @@ public class DataObjectImpl implements DataObject {
     /**
      * Creates and store an object.
      *
-     * @param file      the path of the object to be uploaded.
-     * @param objectKey the path to the destination file.
+     * @param file the path of the object to be uploaded.
+     * @param objectKey  the path to the destination file.
      * @throws ObjectAlreadyExistsException if the object already exists.
      */
     @Override
-    public void createObject(MultipartFile file, String objectKey) {
+    public void createObject(MultipartFile file, String objectKey) throws IOException {
         if (doesExist(objectKey))
             throw new ObjectAlreadyExistsException(objectKey);
 
-        InputStream inputStream;
-        try {
-            inputStream = file.getInputStream();
-        } catch (IOException e) {
-            throw new RuntimeException(e);
-        }
+        InputStream inputStream = file.getInputStream();
 
         PutObjectRequest putObjectRequest = PutObjectRequest.builder()
                 .bucket(bucketName)

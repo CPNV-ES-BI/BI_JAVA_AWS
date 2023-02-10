@@ -16,6 +16,7 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import javax.validation.constraints.NotNull;
+import java.io.IOException;
 import java.net.URL;
 
 @Api("DataObject API REST")
@@ -41,7 +42,7 @@ public class DataObjectController {
     public ResponseEntity<String> create(
             @RequestParam(name = "file") @NotNull MultipartFile file,
             @RequestParam(name = "key") @NonEmptyString String key
-    ) throws MimeTypeException {
+    ) throws MimeTypeException, IOException {
         dataObject.createObject(file, extensionResolver.extractMultipartFileDetails(key, file));
         return ResponseEntity.status(HttpStatus.CREATED).body("Object created successfully");
     }

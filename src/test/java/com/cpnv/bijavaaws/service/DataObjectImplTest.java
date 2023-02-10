@@ -45,7 +45,7 @@ class DataObjectImplTest {
     }
 
     @BeforeEach
-    void beforeEach() {
+    void beforeEach() throws IOException {
         objectKey = testFilePath.getOriginalFilename();
         deleteObjectIfExists(objectKey);
 
@@ -95,7 +95,7 @@ class DataObjectImplTest {
     }
 
     @Test
-    void createObject_PathNotExists_ObjectExists() {
+    void createObject_PathNotExists_ObjectExists() throws IOException {
         // Given
         objectKey = "level1/level2/level3/" + objectKey;
         deleteObjectIfExists(objectKey);
@@ -172,7 +172,7 @@ class DataObjectImplTest {
     }
 
     @Test
-    void deleteObject_ObjectContainingSubObjectsExists_ObjectDeletedRecursively() {
+    void deleteObject_ObjectContainingSubObjectsExists_ObjectDeletedRecursively() throws IOException {
         // Given
         String keyToDelete = "level1";
         objectKey = MessageFormat.format("{0}/level2/level3/{1}", keyToDelete, objectKey);

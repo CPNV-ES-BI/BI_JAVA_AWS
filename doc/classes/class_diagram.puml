@@ -36,15 +36,21 @@ package BI_JAVA_AWS {
 
 class Exception
 
+class IOException {
+    + IOException()
+}
+
 interface S3Client
 
 DataObject <|.. DataObjectImpl
 
 DataObjectImpl ..> ObjectAlreadyExistsException : throws
 DataObjectImpl ..> ObjectNotFoundException : throws
+DataObjectImpl ..> IOException : throws
 
 ObjectAlreadyExistsException --|> Exception
 ObjectNotFoundException --|> Exception
+IOException --|> Exception
 
 DataObjectImpl *- S3Client
 

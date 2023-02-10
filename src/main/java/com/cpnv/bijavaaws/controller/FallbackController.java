@@ -16,6 +16,7 @@ import org.springframework.web.multipart.support.MissingServletRequestPartExcept
 import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExceptionHandler;
 
 import javax.validation.ConstraintViolationException;
+import java.io.IOException;
 
 @ControllerAdvice
 public class FallbackController extends ResponseEntityExceptionHandler {
@@ -38,6 +39,7 @@ public class FallbackController extends ResponseEntityExceptionHandler {
             MimeTypeException.class,
             MissingRequestHeaderException.class,
             ConstraintViolationException.class,
+            IOException.class
     })
     public final ResponseEntity<Object> handleException(Exception ex) {
         return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(ex.getMessage());
