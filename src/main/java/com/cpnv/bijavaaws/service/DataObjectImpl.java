@@ -14,7 +14,6 @@ import java.net.URL;
 
 import software.amazon.awssdk.core.sync.RequestBody;
 import software.amazon.awssdk.services.s3.S3Client;
-import software.amazon.awssdk.services.s3.model.DeleteObjectRequest;
 import software.amazon.awssdk.services.s3.model.NoSuchKeyException;
 import software.amazon.awssdk.services.s3.model.PutObjectRequest;
 import software.amazon.awssdk.services.s3.presigner.S3Presigner;
@@ -131,18 +130,15 @@ public class DataObjectImpl implements DataObject {
      */
     @Override
     public void deleteObject(String key, boolean isRecursive) {
-        if (isRecursive)
-            deleteObjectRecursive(key);
-        else
-            deleteObject(key);
-    }
+        if (isRecursive) {
+            var objects = s3Client.listObjects(builder -> builder.bucket(bucketName).prefix(key));
+            objects.contents().forEach(s3Object -> s3Client.deleteObject(builder -> builder.bucket(bucketName).key(s3Object.key())));
+        } else {
+            if (!doesExist(key))
+                throw new ObjectNotFoundException(key);
 
-    private void deleteObjectRecursive(String key) {
-        var objects = s3Client.listObjects(builder -> builder.bucket(bucketName).prefix(key));
-        objects.contents().forEach(s3Object -> {
-            var deleteObjectRequest = DeleteObjectRequest.builder().bucket(bucketName).key(s3Object.key()).build();
-            s3Client.deleteObject(deleteObjectRequest);
-        });
+            s3Client.deleteObject(builder -> builder.bucket(bucketName).key(key));
+        }
     }
 
     /**
@@ -151,9 +147,6 @@ public class DataObjectImpl implements DataObject {
      * @param key the object key.
      */
     public void deleteObject(String key) {
-        if (!doesExist(key))
-            throw new ObjectNotFoundException(key);
-
-        s3Client.deleteObject(builder -> builder.bucket(bucketName).key(key));
+        deleteObject(key, false);
     }
 }
