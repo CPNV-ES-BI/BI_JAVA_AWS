@@ -10,7 +10,7 @@
     </parent>
     <groupId>com.cpnv</groupId>
     <artifactId>bi-java-aws</artifactId>
-    <version>0.0.1-SNAPSHOT</version>
+    <version>1.0.0</version>
     <name>bi-java-aws</name>
     <description>Spring boot microservice using docker</description>
     <properties>
