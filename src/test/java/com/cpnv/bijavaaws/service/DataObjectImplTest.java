@@ -70,7 +70,7 @@ class DataObjectImplTest {
         boolean result = dataObject.doesExist(objectKey);
 
         // Then
-        assertFalse(result);
+        assertTrue(result);
     }
 
     @Test
